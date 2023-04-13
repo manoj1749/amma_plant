@@ -19,11 +19,10 @@ import {
 import SignInPage from './screens/signInScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import HomePage from './screens/HomePage';
+import HomePage from './stacks/HomePage.stack';
 import {selectUser} from './features/auth/userSlice';
 import {useSelector} from 'react-redux';
-import AppStacks from './stacks/AppStack';
-import AuthStacks from './stacks/AuthStack';
+import StackNavigaor from './StackNavigaor';
 
 const Stack = createStackNavigator();
 function App() {
@@ -31,7 +30,7 @@ function App() {
   const user = useSelector(selectUser);
   return (
     <NavigationContainer>
-      {Object.keys(user).length !== 0 ? <AppStacks /> : <AuthStacks />}
+      <StackNavigaor />
     </NavigationContainer>
   );
 }

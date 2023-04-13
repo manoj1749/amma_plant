@@ -15,86 +15,103 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {
   GoogleSignin,
+  GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
+import auth, {firebase} from '@react-native-firebase/auth';
 import {setUser} from '../features/auth/userSlice';
 const SignInPage = ({navigation}) => {
   // const [user, setUser] = useState({});
   const dispatch = useDispatch();
-  const {user} = useSelector(state => state.user);
+  const {user, loggedIn} = useSelector(state => state.user);
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
         '814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com',
-      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-      // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-      // iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+      offlineAccess: true,
     });
-    isSignedIn();
   }, []);
-  const signIn = async () => {
+
+  const firebaseGoogleLogin = async () => {
+    try {
+      // add any configuration settings here:
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      // this.setState({userInfo: userInfo, loggedIn: true});
+      dispatch(setUser({user: userInfo, loggedIn: true}));
+      console.log(userInfo);
+      // create a new firebase credential with the token
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        userInfo.idToken,
+        userInfo.accessToken,
+      );
+      // login with credential
+      const firebaseUserCredential = await firebase
+        .auth()
+        .signInWithCredential(credential);
+
+      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+    } catch (error) {
+      console.log(error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log('user cancelled the login flow');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (f.e. sign in) is in progress already
+        console.log('operation (f.e. sign in) is in progress already');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log('play services not available or outdated');
+      } else {
+        // some other error happened
+        console.log('some other error happened');
+      }
+    }
+  };
+
+  const _signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      dispatch(setUser(userInfo));
-      navigation.navigate('Home');
+      this.setState({userInfo: userInfo, loggedIn: true});
+      console.log(userInfo);
     } catch (error) {
-      console.log('Message', error.message);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('User Cancelled the Login Flow');
+        // user cancelled the login flow
+        console.log('user cancelled the login flow');
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Signing In');
+        // operation (f.e. sign in) is in progress already
+        console.log('operation (f.e. sign in) is in progress already');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Play Services Not Available or Outdated');
+        // play services not available or outdated
+        console.log('play services not available or outdated');
       } else {
-        console.log('Some Other Error Happened');
+        // some other error happened
+        console.log('some other error happened');
       }
     }
   };
-  const isSignedIn = async () => {
-    const isSignedIn = await GoogleSignin.isSignedIn();
-    if (!!isSignedIn) {
-      getCurrentUserInfo();
-    } else {
-      console.log('Please Login');
-    }
-  };
+
   const getCurrentUserInfo = async () => {
     try {
       const userInfo = await GoogleSignin.signInSilently();
+      // this.setState({userInfo});
       dispatch(setUser(userInfo));
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-        alert('User has not signed in yet');
-        console.log('User has not signed in yet');
+        // user has not signed in yet
+        console.log('user has not signed in yet');
+        // this.setState({loggedIn: false});
+        dispatch(setUser({loggedIn: false}));
       } else {
-        alert("Something went wrong. Unable to get user's info");
-        console.log("Something went wrong. Unable to get user's info");
+        // some other error
+        console.log('some other error happened');
+        // this.setState({loggedIn: false});
+        dispatch(setUser({loggedIn: false}));
       }
     }
   };
-
-  // GoogleSignin.configure({
-  //   webClientId:
-  //     '814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com',
-  // });
-  // const signInWithGoogleAync = async () => {
-  //   await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-
-  //   const {idToken} = await GoogleSignin.signIn();
-
-  //   const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-  //   const user_signIn = auth().signInWithCredential(googleCredential);
-  //   user_signIn
-  //     .then(user => {
-  //       console.log(user);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -102,7 +119,7 @@ const SignInPage = ({navigation}) => {
         style={styles.backgroundImage}>
         <View style={styles.overlay}>
           <View style={{marginTop: 100}}>
-            <TouchableOpacity onPress={() => signIn()}>
+            <TouchableOpacity onPress={firebaseGoogleLogin}>
               <View style={styles.button}>
                 <Image
                   style={{width: 30, height: 30, marginHorizontal: 10}}

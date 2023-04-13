@@ -1,4 +1,3 @@
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import React from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';

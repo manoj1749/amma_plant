@@ -5,30 +5,35 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clearUser} from '../features/auth/userSlice';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Icon from 'react-native-vector-icons/AntDesign';
+import auth, {firebase} from '@react-native-firebase/auth';
 
 const UserProfile = ({navigation}) => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => state.user);
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com',
-      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-      // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-      // iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-    });
-    signOut();
-  }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId:
+  //       '814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com',
+  //     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  //     // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+  //     // iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+  //   });
+  //   signOut();
+  // }, []);
   console.log(user);
-  const signOut = async () => {
-    try {
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
-      dispatch(clearUser());
-      navigation.navigate('Login'); // Remember to remove the user from your app's state as well
-    } catch (error) {
-      console.error(error);
-    }
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(
+        function () {
+          dispatch(clearUser());
+          // navigation.navigate('Login');
+        },
+        function (error) {
+          console.log(error);
+        },
+      );
   };
   return (
     <View style={{flex: 1}}>
@@ -42,6 +47,7 @@ const UserProfile = ({navigation}) => {
         <Avatar.Image
           size={100}
           style={{marginHorizontal: 20, backgroundColor: 'salmon'}}
+          source={{uri: user && user.user && user.user.user.photo}}
         />
       </View>
       <View
@@ -54,7 +60,7 @@ const UserProfile = ({navigation}) => {
         }}>
         <TextInput
           label="Full Name"
-          value={'text'}
+          value={user && user.user && user.user.user.photo}
           // onChangeText={text => setText(text)}
           mode="outlined"
           disabled

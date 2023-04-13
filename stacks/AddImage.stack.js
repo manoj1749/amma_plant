@@ -6,30 +6,77 @@ import {
   ImageBackground,
   TextInput,
   StyleSheet,
+  Pressable,
+  Modal,
+  SafeAreaView,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const AddImage = () => {
+  const [uri, setUri] = React.useState(undefined);
+  const [visible, setVisible] = React.useState(false);
+  const close = () => setVisible(false);
+  const open = () => setVisible(true);
+  const chooseImage = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        setUri(image.path);
+        props.onChange?.(image);
+      })
+      .finally(close);
+  };
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        setUri(image.path);
+        props.onChange?.(image);
+      })
+      .finally(close);
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.camera}>
-        <Icon name="camera" size={30} color="balck" />
+    <>
+      <View style={styles.container}>
+        <View style={styles.camera} onPress={chooseImage}>
+          <Icon name="camera" size={30} />
+        </View>
+        <View style={{flex: 0.2, paddingLeft: 10}}>
+          <TextInput placeholder="description" />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button buttonColor="#D3D3D3" style={styles.button} mode="contained">
+            <Icon name="enviroment" size={15} /> <Text> Loaction</Text>
+          </Button>
+          <Button style={styles.button} buttonColor="salmon" mode="contained">
+            <Icon name="upload" size={15} /> <Text> Upload Image</Text>
+          </Button>
+        </View>
       </View>
-      <View style={{flex: 0.2, paddingLeft: 10}}>
-        <TextInput placeholder="description" />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button buttonColor="#D3D3D3" style={styles.button} mode="contained">
-          <Icon name="enviroment" size={15} color="balck" />{' '}
-          <Text> Loaction</Text>
-        </Button>
-        <Button style={styles.button} buttonColor="salmon" mode="contained">
-          <Icon name="upload" size={15} color="balck" />{' '}
-          <Text> Upload Image</Text>
-        </Button>
-      </View>
-    </View>
+      <Modal
+        isVisible={visible}
+        onBackButtonPress={close}
+        onBackdropPress={close}
+        style={{justifyContent: 'flex-end', margin: 0, height: 5}}>
+        <SafeAreaView style={styles.options}>
+          <Pressable style={styles.option} onPress={chooseImage}>
+            <Icon name="image" />
+            <Text>Library </Text>
+          </Pressable>
+          <Pressable style={styles.option} onPress={openCamera}>
+            <Icon name="camera" />
+            <Text>Camera</Text>
+          </Pressable>
+        </SafeAreaView>
+      </Modal>
+    </>
   );
 };
 
@@ -52,6 +99,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 0.5,
+    alignItems: 'center',
+  },
+  options: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+  },
+  option: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   commandButton: {
