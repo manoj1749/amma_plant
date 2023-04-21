@@ -3,4 +3,5 @@ module.exports = {
   env: {
     enableHermes: {},
   },
+  plugins: ['react-native-reanimated/plugin'],
 };

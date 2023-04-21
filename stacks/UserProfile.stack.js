@@ -9,6 +9,7 @@ import auth, {firebase} from '@react-native-firebase/auth';
 
 const UserProfile = ({navigation}) => {
   const dispatch = useDispatch();
+
   const {user} = useSelector(state => state.user);
   // useEffect(() => {
   //   GoogleSignin.configure({
@@ -60,7 +61,7 @@ const UserProfile = ({navigation}) => {
         }}>
         <TextInput
           label="Full Name"
-          value={user && user.user && user.user.user.photo}
+          value={user && user.user && user.user.user.name}
           // onChangeText={text => setText(text)}
           mode="outlined"
           disabled
