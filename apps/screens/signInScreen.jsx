@@ -19,8 +19,12 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import auth, {firebase} from '@react-native-firebase/auth';
-import {setUser} from '../features/auth/userSlice';
+import {loginAction, setUser} from '../redux/slices/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setTokenId, storeUserDetails} from '../utiltis/utilitis';
+// import {API_URL} from '@env';
 const SignInPage = ({navigation}) => {
+  // console.log(API_URL);
   // const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const {user, loggedIn} = useSelector(state => state.user);
@@ -36,37 +40,13 @@ const SignInPage = ({navigation}) => {
     try {
       // add any configuration settings here:
       await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
-      // this.setState({userInfo: userInfo, loggedIn: true});
-      dispatch(setUser({user: userInfo, loggedIn: true}));
-      console.log(userInfo);
-      // create a new firebase credential with the token
-      const credential = firebase.auth.GoogleAuthProvider.credential(
-        userInfo.idToken,
-        userInfo.accessToken,
-      );
-      // login with credential
-      const firebaseUserCredential = await firebase
-        .auth()
-        .signInWithCredential(credential);
+      const {idToken, user} = await GoogleSignin.signIn();
 
-      console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+      storeUserDetails({id: user.id, token: idToken, isAuthenticated: true});
+      dispatch(loginAction({idToken}));
     } catch (error) {
       console.log(error);
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        console.log('user cancelled the login flow');
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (f.e. sign in) is in progress already
-        console.log('operation (f.e. sign in) is in progress already');
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log('play services not available or outdated');
-      } else {
-        // some other error happened
-        console.log('some other error happened');
-      }
+      e.log('some other error happened');
     }
   };
 

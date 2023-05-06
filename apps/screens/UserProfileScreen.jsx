@@ -2,15 +2,17 @@ import {View, TouchableOpacity} from 'react-native';
 import React, {useEffect} from 'react';
 import {Avatar, Button, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {clearUser} from '../features/auth/userSlice';
+import {clearUser, selectUser, signoutAction} from '../redux/slices/userSlice';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Icon from 'react-native-vector-icons/AntDesign';
 import auth, {firebase} from '@react-native-firebase/auth';
+import {getTokenId, getUserDetails, removeTokenId} from '../utiltis/utilitis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserProfile = ({navigation}) => {
   const dispatch = useDispatch();
 
-  const {user} = useSelector(state => state.user);
+  const [userDetails] = useSelector(selectUser);
   // useEffect(() => {
   //   GoogleSignin.configure({
   //     webClientId:
@@ -21,23 +23,15 @@ const UserProfile = ({navigation}) => {
   //   });
   //   signOut();
   // }, []);
-  console.log(user);
+
   const signOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(
-        function () {
-          dispatch(clearUser());
-          // navigation.navigate('Login');
-        },
-        function (error) {
-          console.log(error);
-        },
-      );
+    getUserDetails().then(res => {
+      dispatch(signoutAction(res.token));
+    });
+    removeTokenId();
   };
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: '#f4ede630'}}>
       <View
         style={{
           flex: 0.3,
@@ -46,9 +40,9 @@ const UserProfile = ({navigation}) => {
           padding: 10,
         }}>
         <Avatar.Image
-          size={100}
+          size={150}
           style={{marginHorizontal: 20, backgroundColor: 'salmon'}}
-          source={{uri: user && user.user && user.user.user.photo}}
+          source={{uri: userDetails && userDetails.picture}}
         />
       </View>
       <View
@@ -61,7 +55,7 @@ const UserProfile = ({navigation}) => {
         }}>
         <TextInput
           label="Full Name"
-          value={user && user.user && user.user.user.name}
+          value={userDetails && userDetails.name}
           // onChangeText={text => setText(text)}
           mode="outlined"
           disabled
