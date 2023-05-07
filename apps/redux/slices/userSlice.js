@@ -10,7 +10,7 @@ const initialState = {
 export const loginAction = createAsyncThunk('user/login', async isToken => {
   console.log(isToken);
   const res = await axios.post(
-    'http://192.168.18.43:4848/api/google-signin',
+    'https://amma-plant.onrender.com/api/google-signin',
     isToken,
   );
   const data = await res.data;
@@ -19,7 +19,7 @@ export const loginAction = createAsyncThunk('user/login', async isToken => {
 export const signoutAction = createAsyncThunk('user/signout', async isToken => {
   console.log(isToken);
   const res = await axios.post(
-    'http://192.168.18.43:4848/api/signOut',
+    'https://amma-plant.onrender.com/api/signOut',
     isToken,
   );
   const data = await res.data;
@@ -28,7 +28,7 @@ export const signoutAction = createAsyncThunk('user/signout', async isToken => {
 export const getUserDetail = createAsyncThunk('user/userDetails', async id => {
   console.log('id', id);
   const res = await axios.get(
-    `http://192.168.18.43:4848/api/user/userDetails/${id}`,
+    `https://amma-plant.onrender.com/api/user/userDetails/${id}`,
   );
   const data = await res.data;
   console.log(data);
@@ -39,7 +39,7 @@ export const uploadPost = createAsyncThunk(
   async uploadData => {
     console.log('id------------------', uploadData);
     const res = await axios.post(
-      `http://192.168.18.43:4848/api/user/post/upload`,
+      `https://amma-plant.onrender.com/api/user/post/upload`,
       uploadData,
     );
     const data = await res.data;

@@ -28,10 +28,10 @@ export default function Splash({navigation}) {
           justifyContent: 'center',
           backgroundColor: 'salmon',
         }}>
-        <Image
+        {/* <Image
           source={require('../assets/image/logo.png')}
           style={{width: 300, height: 100}}
-        />
+        /> */}
       </View>
     </View>
   );
