@@ -34,18 +34,31 @@ export const getUserDetail = createAsyncThunk('user/userDetails', async id => {
   console.log(data);
   return data;
 });
-export const uploadPost = createAsyncThunk(
-  'user/uploadImage',
-  async uploadData => {
-    console.log('id------------------', uploadData);
-    const res = await axios.post(
-      `https://amma-plant.onrender.com/api/user/post/upload`,
-      uploadData,
-    );
-    const data = await res.data;
-    return data;
-  },
-);
+export const uploadPost = createAsyncThunk('user/uploadImage', async posts => {
+  console.log('id------------------', posts);
+  let newPosts = new FormData();
+  newPosts.append('image', {
+    uri: posts.image,
+    type: 'image/jpeg',
+    name: 'image.jpg',
+  });
+  body.append('Content-Type', 'image/png');
+  newPosts.append('description', posts.description);
+  newPosts.append('location', posts.location);
+  newPosts.append('tags', posts.tags);
+  const res = await axios.post(
+    `https://amma-plant.onrender.com/api/user/post/upload`,
+    uploadData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        otherHeader: 'foo',
+      },
+    },
+  );
+  const data = await res.data;
+  return data;
+});
 
 const userSlice = createSlice({
   name: 'user',

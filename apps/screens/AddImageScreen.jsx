@@ -5,10 +5,12 @@ import {
   TouchableOpacity,
   useWindowDimensions,
   Image,
+  PermissionsAndroid,
   ImageBackground,
   TextInput,
   ScrollView,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import Animated, {
@@ -27,11 +29,17 @@ import {selectLocation} from '../redux/slices/mapSlice';
 import Geolocation from '@react-native-community/geolocation';
 import {useGeolocation} from '../hooks/useGeoLocation';
 import Tags from 'react-native-tags';
+
 import {
   selectLoading,
   selectuploaded,
   uploadPost,
 } from '../redux/slices/userSlice';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import ImagePickerContainer from '../components/ImagePickerContainer';
+import ImagePickerModal from '../components/ImagePickerModal';
+import Toast from 'react-native-toast-message';
+import {WithContext as ReactTags} from 'react-tag-input';
 const _SPRING_CONFIG = {
   damping: 80,
   overshootClamping: true,
@@ -52,6 +60,7 @@ const AddImage = ({navigation}) => {
   const top = useSharedValue(dimention.height);
   const [location, setLocation] = React.useState(null);
   const [error, setError] = React.useState(null);
+  const [pickerResponse, setPickerResponse] = React.useState(null);
   const dispatch = useDispatch();
   const isLoading = useSelector(selectuploaded);
 
@@ -62,6 +71,10 @@ const AddImage = ({navigation}) => {
           longitude: position.coords.longitude,
           latitude: position.coords.latitude,
         });
+        Toast.show({
+          type: 'success',
+          text1: 'Live Location captured',
+        });
       },
       error => {
         setError(error);
@@ -69,56 +82,6 @@ const AddImage = ({navigation}) => {
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   };
-
-  const style = useAnimatedStyle(() => {
-    return {
-      top: top.value,
-    };
-  });
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart(_, context) {
-      context.startTop = top.value;
-    },
-    onActive(e, context) {
-      top.value = context.startTop + e.translationY;
-    },
-    onEnd() {
-      if (top.value > dimention.height / 2 + 200) {
-        top.value = dimention.height;
-      } else {
-        top.value = dimention.height / 2;
-      }
-    },
-  });
-  const openCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-    })
-      .then(image => {
-        setUri(image.path);
-        props.onChange?.(image);
-      })
-      .finally(close);
-  };
-  const chooseImage = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-    })
-      .then(image => {
-        setUri(image.path);
-        props.onChange?.(image);
-      })
-      .finally(close);
-  };
-  useEffect(() => {
-    if (uri) {
-      setEnableCamera(false);
-    }
-  }, [uri]);
 
   const onChangehandler = text => {
     setDescripton(text);
@@ -133,39 +96,40 @@ const AddImage = ({navigation}) => {
     };
     dispatch(uploadPost(data));
   };
+  let options = {
+    saveToPhotos: true,
+    mediaType: 'photo',
+  };
+  const onImageLibraryPress = async () => {
+    const response = await launchImageLibrary(options);
+    setPickerResponse(response.assets[0].uri);
+    setVisible(false);
+  };
+  const onCameraPress = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const response = await launchCamera(options);
+      setPickerResponse(response.assets[0].uri);
+      setVisible(false);
+    }
+  };
+
   return (
     <>
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
+        <ImagePickerModal
+          isVisible={visible}
+          onClose={() => setVisible(false)}
+          onCameraPress={onCameraPress}
+          onImageLibraryPress={onImageLibraryPress}
+        />
         <View style={styles.firstContainer}>
-          {uri ? (
-            <ImageBackground
-              source={{uri: uri}}
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              resizeMode="cover">
-              <TouchableOpacity
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(0,0,0,0.3)',
-                }}
-                onPress={() => setEnableCamera(!enableCamera)}>
-                <Icon name={'edit'} size={30} color="white" />
-              </TouchableOpacity>
-            </ImageBackground>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                top.value = withSpring(700, _SPRING_CONFIG);
-                setEnableCamera(!enableCamera);
-              }}>
-              <Icon name="camera" color="black" size={30} />
-            </TouchableOpacity>
-          )}
+          <ImagePickerContainer
+            uri={pickerResponse}
+            onPress={() => setVisible(true)}
+          />
         </View>
         <View
           style={{
@@ -203,50 +167,7 @@ const AddImage = ({navigation}) => {
               }}>
               Tags
             </Text>
-            <Tags
-              textInputProps={{
-                placeholder: 'type tree and click space',
-              }}
-              initialTags={[]}
-              onChangeTags={tags => setTags(tags)}
-              onTagPress={(index, tagLabel, event, deleted) =>
-                console.log(
-                  index,
-                  tagLabel,
-                  event,
-                  deleted ? 'deleted' : 'not deleted',
-                )
-              }
-              containerStyle={{
-                padding: 5,
-                width: 370,
-                marginLeft: 5,
-              }}
-              inputStyle={{
-                backgroundColor: 'white',
-                border: '2px solid white',
-                borderRadius: 20,
-              }}
-              renderTag={({
-                tag,
-                index,
-                onPress,
-                deleteTagOnPress,
-                readonly,
-              }) => (
-                <TouchableOpacity
-                  key={`${tag}-${index}`}
-                  onPress={onPress}
-                  style={{
-                    padding: 7,
-                    backgroundColor: 'white',
-                    margin: 5,
-                    borderRadius: 10,
-                  }}>
-                  <Text style={{color: 'salmon'}}>{tag}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            <ReactTags tags={tags} />
           </View>
         </View>
         <View
@@ -310,52 +231,7 @@ const AddImage = ({navigation}) => {
             Upload Image
           </Button>
         </View>
-      </View>
-      {enableCamera && (
-        <PanGestureHandler onGestureEvent={gestureHandler}>
-          <Animated.View
-            style={[
-              {
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                bottom: 0,
-                top: dimention.height,
-                backgroundColor: '#efe0d7',
-                borderTopLeftRadius: 50,
-                borderTopRightRadius: 50,
-                shadowColor: 'black',
-                shadowOffset: {
-                  width: 0,
-                  height: 5,
-                },
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 20,
-                elevation: 5,
-                shadowOpacity: 0.25,
-                boxShadow: ' rgba(149, 157, 165, 0.2) 0px 8px 24px',
-                shadowRadius: 3.84,
-              },
-              style,
-            ]}>
-            <View
-              style={{
-                width: '80%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <TouchableOpacity onPress={openCamera}>
-                <Icon name="camera" size={25} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={chooseImage}>
-                <Icon name="image" size={25} color="black" />
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        </PanGestureHandler>
-      )}
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -366,7 +242,7 @@ const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#f4ede630'},
   firstContainer: {
     flex: 0.3,
-    backgroundColor: '#dcdcdc',
+    backgroundColor: '#f7dcd020',
     alignItems: 'center',
     justifyContent: 'center',
   },

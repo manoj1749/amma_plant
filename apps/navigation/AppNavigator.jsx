@@ -12,6 +12,7 @@ import HomeNavigator from './HomeNavigator';
 import AuthNavigator from './AuthNavigator';
 import Loader from '../components/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 const AppNavigator = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,9 +35,12 @@ const AppNavigator = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <NavigationContainer>
-      {isLoggedIns ? <HomeNavigator /> : <AuthNavigator />}
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        {isLoggedIns ? <HomeNavigator /> : <AuthNavigator />}
+      </NavigationContainer>
+      <Toast position="bottom" bottomOffset={5} visibilityTime={3000} />
+    </>
   );
 };
 

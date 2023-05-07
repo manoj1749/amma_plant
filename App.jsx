@@ -21,7 +21,7 @@ import {Provider, useSelector} from 'react-redux';
 
 import {store} from './apps/redux/store';
 import AppNavigator from './apps/navigation/AppNavigator';
-
+import Toast from 'react-native-toast-message';
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
   const user = useSelector(selectUser);
