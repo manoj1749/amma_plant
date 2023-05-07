@@ -25,10 +25,11 @@ const UserProfile = ({navigation}) => {
   // }, []);
 
   const signOut = () => {
-    getUserDetails().then(res => {
-      dispatch(signoutAction(res.token));
-    });
-    removeTokenId();
+    // getUserDetails().then(res => {
+    //   console.log('idToken', res.token);
+    //   dispatch(signoutAction());
+    // });
+    dispatch(signoutAction());
   };
   return (
     <View style={{flex: 1, backgroundColor: '#f4ede630'}}>

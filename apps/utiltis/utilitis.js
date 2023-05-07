@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 async function setTokenId(tokenId) {
   try {
-    await AsyncStorage.setItem('token', tokenId);
+    await AsyncStorage.setItem('userDetails', tokenId);
     console.log('Token ID set successfully.');
   } catch (error) {
     console.error('Error while setting token ID:', error);
@@ -12,7 +12,7 @@ async function setTokenId(tokenId) {
 
 async function getTokenId() {
   try {
-    const tokenId = await AsyncStorage.getItem('token');
+    const tokenId = await AsyncStorage.getItem('userDetails');
     console.log('Token ID retrieved successfully.');
     return tokenId;
   } catch (error) {
