@@ -85,6 +85,7 @@ const userSlice = createSlice({
       state.uploaded = true;
     });
     builder.addCase(uploadPost.fulfilled, (state, action) => {
+      alert('yes');
       state.userDetails = state.userDetails;
       state.uploaded = false;
     });

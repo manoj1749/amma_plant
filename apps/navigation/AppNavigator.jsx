@@ -35,7 +35,7 @@ const AppNavigator = () => {
     <Loader />
   ) : (
     <NavigationContainer>
-      {isLoggedIns ? <HomeNavigator /> : <AuthNavigator />}
+      <HomeNavigator />
     </NavigationContainer>
   );
 };
