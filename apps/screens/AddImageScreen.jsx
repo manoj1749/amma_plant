@@ -125,13 +125,13 @@ const AddImage = ({navigation}) => {
   };
   const handleUpload = () => {
     const data = {
-      image: uri.split('/').pop(),
+      image:
+        'https://lh3.googleusercontent.com/a/AGNmyxbdp59yCNxoZgirhbaREVh2m--g7pzwG5dYDHXlwA=s96-c',
       description: description,
       location: location,
       tag: tags,
     };
     dispatch(uploadPost(data));
-    console.log(description, uri.split('/').pop(), location, tags);
   };
   return (
     <>
@@ -219,7 +219,7 @@ const AddImage = ({navigation}) => {
               }
               containerStyle={{
                 padding: 5,
-                width: 400,
+                width: 370,
                 marginLeft: 5,
               }}
               inputStyle={{
@@ -373,9 +373,10 @@ const styles = StyleSheet.create({
   input: {
     margin: 12,
     borderWidth: 0,
-    width: 400,
+    width: 370,
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 20,
+    color: 'black',
   },
 });
