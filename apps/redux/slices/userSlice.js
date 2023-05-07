@@ -10,7 +10,7 @@ const initialState = {
 export const loginAction = createAsyncThunk('user/login', async isToken => {
   console.log(isToken);
   const res = await axios.post(
-    'http://192.168.18.43:4848/api/google-signin',
+    'https://amma-plant.onrender.com/api/google-signin',
     isToken,
   );
   const data = await res.data;
@@ -19,7 +19,7 @@ export const loginAction = createAsyncThunk('user/login', async isToken => {
 export const signoutAction = createAsyncThunk('user/signout', async isToken => {
   console.log(isToken);
   const res = await axios.post(
-    'http://192.168.18.43:4848/api/signOut',
+    'https://amma-plant.onrender.com/api/signOut',
     isToken,
   );
   const data = await res.data;
