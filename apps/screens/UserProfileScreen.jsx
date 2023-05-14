@@ -2,17 +2,22 @@ import {View, TouchableOpacity} from 'react-native';
 import React, {useEffect} from 'react';
 import {Avatar, Button, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {clearUser, selectUser, signoutAction} from '../redux/slices/userSlice';
+import {
+  clearUser,
+  selectUser,
+  selectUsersDetails,
+  signoutAction,
+} from '../redux/slices/userSlice';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Icon from 'react-native-vector-icons/AntDesign';
 import auth, {firebase} from '@react-native-firebase/auth';
 import {getTokenId, getUserDetails, removeTokenId} from '../utiltis/utilitis';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import auther from '@react-native-firebase/auth';
 
 const UserProfile = ({navigation}) => {
   const dispatch = useDispatch();
-
-  const [userDetails] = useSelector(selectUser);
+  const user = useSelector(selectUsersDetails);
   // useEffect(() => {
   //   GoogleSignin.configure({
   //     webClientId:
@@ -29,7 +34,13 @@ const UserProfile = ({navigation}) => {
     //   console.log('idToken', res.token);
     //   dispatch(signoutAction());
     // });
-    dispatch(signoutAction());
+    // dispatch(signoutAction());
+    auther()
+      .signOut()
+      .then(() => {
+        AsyncStorage.removeItem('@loggedInUserID:id');
+        navigation.navigate('Login');
+      });
   };
   return (
     <View style={{flex: 1, backgroundColor: '#f4ede630'}}>
@@ -43,7 +54,7 @@ const UserProfile = ({navigation}) => {
         <Avatar.Image
           size={150}
           style={{marginHorizontal: 20, backgroundColor: 'salmon'}}
-          source={{uri: userDetails && userDetails.picture}}
+          source={{uri: user && user.photoURL}}
         />
       </View>
       <View
@@ -56,7 +67,7 @@ const UserProfile = ({navigation}) => {
         }}>
         <TextInput
           label="Full Name"
-          value={userDetails && userDetails.name}
+          value={user && user.fullname}
           // onChangeText={text => setText(text)}
           mode="outlined"
           disabled

@@ -7,15 +7,14 @@ import Geolocation from '@react-native-community/geolocation';
 import {setLocation} from '../redux/slices/mapSlice';
 import MapScreen from '../components/MapScreen';
 import {getUserDetails} from '../utiltis/utilitis';
-import {getUserDetail} from '../redux/slices/userSlice';
+import {getUserDetail, selectUsersDetails} from '../redux/slices/userSlice';
 
 const HomePage = ({navigation}) => {
   const dispatch = useDispatch();
+  const user = useSelector(selectUsersDetails);
+  console.log(user, 'mmmmmmmmmmmmmmmmmmmmmmmmm');
 
   React.useEffect(() => {
-    getUserDetails().then(res => {
-      dispatch(getUserDetail(res.id));
-    });
     Geolocation.getCurrentPosition(
       position => {
         const {latitude, longitude} = position.coords;
@@ -30,7 +29,7 @@ const HomePage = ({navigation}) => {
   }, []);
   return (
     <View style={styles.container}>
-      <Map />
+      {/* <Map /> */}
       {/* <MapScreen /> */}
       <FAB
         icon="plus"

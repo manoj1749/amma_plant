@@ -7,22 +7,30 @@ import homeScreen from '../screens/HomeScreen';
 import splashScreen from '../screens/splashScreen';
 import {Avatar} from 'react-native-paper';
 import {useSelector} from 'react-redux';
-import {selectUser} from '../redux/slices/userSlice';
+import {selectUser, selectUsersDetails} from '../redux/slices/userSlice';
+import SignInPage from '../screens/signInScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import Splash from '../screens/splashScreen';
 
 const Stack = createStackNavigator();
-const HomeNavigator = () => {
-  const [userDetails] = useSelector(selectUser);
-  console.log(userDetails);
-
+const RootNavigator = () => {
+  const user = useSelector(selectUsersDetails);
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
-        name="splash"
-        component={splashScreen}
+      <Stack.Screen
         options={{
           headerShown: false,
         }}
-      /> */}
+        name="Welcome"
+        component={Splash}
+      />
+      <Stack.Screen
+        name="Login"
+        component={SignInPage}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Home"
         component={homeScreen}
@@ -42,7 +50,7 @@ const HomeNavigator = () => {
               <Avatar.Image
                 size={34}
                 style={{marginHorizontal: 20, backgroundColor: 'salmon'}}
-                source={{uri: userDetails && userDetails.picture}}
+                source={{uri: user && user.photoURL}}
               />
             </TouchableOpacity>
           ),
@@ -60,4 +68,4 @@ const HomeNavigator = () => {
   );
 };
 
-export default HomeNavigator;
+export default RootNavigator;

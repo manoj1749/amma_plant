@@ -48,9 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     width: '90%',
-    marginHorizontal: 20,
-
-    marginVertical: 20,
   },
   subContainer: {
     // backgroundColor: 'red',
