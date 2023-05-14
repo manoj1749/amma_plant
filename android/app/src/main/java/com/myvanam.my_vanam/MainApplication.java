@@ -1,4 +1,4 @@
-package com.amma_plant;
+package com.myvanam.my_vanam;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

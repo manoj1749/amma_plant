@@ -40,6 +40,10 @@ import ImagePickerContainer from '../components/ImagePickerContainer';
 import ImagePickerModal from '../components/ImagePickerModal';
 import Toast from 'react-native-toast-message';
 import {WithContext as ReactTags} from 'react-tag-input';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import Loader from '../components/Loader';
+
 const _SPRING_CONFIG = {
   damping: 80,
   overshootClamping: true,
@@ -51,7 +55,7 @@ const AddImage = ({navigation}) => {
   const [uri, setUri] = React.useState(undefined);
   const [description, setDescripton] = React.useState('');
   const [isLiveLocation, setIsLiveLocation] = React.useState(true);
-  const [tags, setTags] = React.useState(null);
+  const [tags, setTags] = React.useState();
   const [visible, setVisible] = React.useState(false);
   const [enableCamera, setEnableCamera] = React.useState(false);
   const close = () => setVisible(false);
@@ -61,8 +65,10 @@ const AddImage = ({navigation}) => {
   const [location, setLocation] = React.useState(null);
   const [error, setError] = React.useState(null);
   const [pickerResponse, setPickerResponse] = React.useState(null);
+  const [Done, setDone] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectuploaded);
 
   const getLocation = () => {
     Geolocation.getCurrentPosition(
@@ -86,15 +92,29 @@ const AddImage = ({navigation}) => {
   const onChangehandler = text => {
     setDescripton(text);
   };
-  const handleUpload = () => {
+  async function uploadImageAndGetUrl(localFilePath) {
+    const reference = storage().ref('images/' + Date.now().toString());
+    await reference.putFile(localFilePath);
+    const downloadURL = await reference.getDownloadURL();
+    return downloadURL;
+  }
+  async function storeImageData(description, location, imageUrl) {
+    setLoading(true);
     const data = {
-      image:
-        'https://lh3.googleusercontent.com/a/AGNmyxbdp59yCNxoZgirhbaREVh2m--g7pzwG5dYDHXlwA=s96-c',
-      description: description,
-      location: location,
-      tag: tags,
+      description,
+      location,
+      imageUrl,
+      createdAt: firestore.FieldValue.serverTimestamp(),
     };
-    dispatch(uploadPost(data));
+    await firestore()
+      .collection('posts')
+      .add(data)
+      .then(res => setLoading(false));
+  }
+  const handleUpload = async () => {
+    const imageUrl = await uploadImageAndGetUrl(pickerResponse);
+
+    await storeImageData('Image description', 'Image location', imageUrl);
   };
   let options = {
     saveToPhotos: true,
@@ -106,11 +126,15 @@ const AddImage = ({navigation}) => {
     setVisible(false);
   };
   const onCameraPress = async () => {
+    let optionss = {
+      saveToPhotos: true,
+      mediaType: 'photo',
+    };
+    const response = await launchCamera(optionss);
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      const response = await launchCamera(options);
       setPickerResponse(response.assets[0].uri);
       setVisible(false);
     }
@@ -118,87 +142,75 @@ const AddImage = ({navigation}) => {
 
   return (
     <>
-      <KeyboardAvoidingView style={styles.container}>
-        <ImagePickerModal
-          isVisible={visible}
-          onClose={() => setVisible(false)}
-          onCameraPress={onCameraPress}
-          onImageLibraryPress={onImageLibraryPress}
-        />
-        <View style={styles.firstContainer}>
-          <ImagePickerContainer
-            uri={pickerResponse}
-            onPress={() => setVisible(true)}
+      {loading ? (
+        <Loader />
+      ) : (
+        <KeyboardAvoidingView style={styles.container}>
+          <ImagePickerModal
+            isVisible={visible}
+            onClose={() => setVisible(false)}
+            onCameraPress={onCameraPress}
+            onImageLibraryPress={onImageLibraryPress}
           />
-        </View>
-        <View
-          style={{
-            flex: 0.3,
-            alignItems: 'center',
-            marginTop: 30,
-            height: 'auto',
-          }}>
-          <View style={{width: '100%'}}>
-            <Text
-              style={{
-                margin: 5,
-                paddingLeft: 10,
-                color: 'salmon',
-                fontWeight: 700,
-                fontSize: 15,
-              }}>
-              Description
-            </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangehandler}
-              value={description}
-              keyboardType="default"
+          <View style={styles.firstContainer}>
+            <ImagePickerContainer
+              uri={pickerResponse}
+              onPress={() => setVisible(true)}
             />
           </View>
-          <View style={{width: '100%'}}>
-            <Text
-              style={{
-                margin: 5,
-                paddingLeft: 10,
-                color: 'salmon',
-                fontWeight: 700,
-                fontSize: 15,
-              }}>
-              Tags
-            </Text>
-            <ReactTags tags={tags} />
-          </View>
-        </View>
-        <View
-          style={{
-            flex: 0.4,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 50,
-          }}>
           <View
             style={{
-              display: 'flex',
-              // width: '100%',
-              flexDirection: 'row',
+              flex: 0.3,
               alignItems: 'center',
+              marginTop: 30,
+              height: 'auto',
             }}>
-            <Button
+            <View style={{width: '100%'}}>
+              <Text
+                style={{
+                  margin: 5,
+                  paddingLeft: 10,
+                  color: 'salmon',
+                  fontWeight: 700,
+                  fontSize: 15,
+                }}>
+                Description
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangehandler}
+                value={description}
+                keyboardType="default"
+              />
+            </View>
+            <View style={{width: '100%'}}>
+              <Text
+                style={{
+                  margin: 5,
+                  paddingLeft: 10,
+                  color: 'salmon',
+                  fontWeight: 700,
+                  fontSize: 15,
+                }}>
+                Tags
+              </Text>
+              {/* <ReactTags tags={tags} /> */}
+            </View>
+          </View>
+          <View
+            style={{
+              flex: 0.4,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: 50,
+            }}>
+            <View
               style={{
-                width: 150,
-                marginVertical: 10,
-                borderColor: '#DCDCDC',
-                backgroundColor: '#dcdcdc',
-              }}
-              textColor="#5e4036"
-              mode="outlined"
-              icon={'earth'}
-              onPress={getLocation}>
-              Live Location
-            </Button>
-            <Text style={{marginHorizontal: 15}}> or </Text>
-            <TouchableOpacity>
+                display: 'flex',
+
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               <Button
                 style={{
                   width: 150,
@@ -209,29 +221,44 @@ const AddImage = ({navigation}) => {
                 textColor="#5e4036"
                 mode="outlined"
                 icon={'earth'}
-                onPress={() => navigation.navigate('Home')}>
-                Find Location
+                onPress={getLocation}>
+                Live Location
               </Button>
-              {/* <FontAwesome size={20} color="green" name="periscope" /> */}
-            </TouchableOpacity>
-          </View>
+              <Text style={{marginHorizontal: 15}}> or </Text>
+              <TouchableOpacity>
+                <Button
+                  style={{
+                    width: 150,
+                    marginVertical: 10,
+                    borderColor: '#DCDCDC',
+                    backgroundColor: '#dcdcdc',
+                  }}
+                  textColor="#5e4036"
+                  mode="outlined"
+                  icon={'earth'}
+                  onPress={() => navigation.navigate('Home')}>
+                  Find Location
+                </Button>
+              </TouchableOpacity>
+            </View>
 
-          <Button
-            style={{
-              width: 350,
-              marginVertical: 10,
-              borderColor: '#86adae',
-              backgroundColor: 'salmon',
-              padding: 5,
-            }}
-            mode="outlined"
-            textColor="white"
-            onPress={handleUpload}
-            icon={'image'}>
-            Upload Image
-          </Button>
-        </View>
-      </KeyboardAvoidingView>
+            <Button
+              style={{
+                width: 350,
+                marginVertical: 10,
+                borderColor: '#86adae',
+                backgroundColor: 'salmon',
+                padding: 5,
+              }}
+              mode="outlined"
+              textColor="white"
+              onPress={handleUpload}
+              icon={'image'}>
+              Upload Image
+            </Button>
+          </View>
+        </KeyboardAvoidingView>
+      )}
     </>
   );
 };
@@ -239,12 +266,13 @@ const AddImage = ({navigation}) => {
 export default AddImage;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#f4ede630'},
+  container: {flex: 1, backgroundColor: 'white', marginTop: 10},
   firstContainer: {
     flex: 0.3,
-    backgroundColor: '#f7dcd020',
+    backgroundColor: '#86adae',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 30,
   },
   input: {
     margin: 12,

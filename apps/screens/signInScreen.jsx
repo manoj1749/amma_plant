@@ -12,116 +12,146 @@ import {
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
-
+import firestore from '@react-native-firebase/firestore';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import auth, {firebase} from '@react-native-firebase/auth';
-import {loginAction, setUser} from '../redux/slices/userSlice';
+import {login, loginAction, setUser} from '../redux/slices/userSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {setTokenId, storeUserDetails} from '../utiltis/utilitis';
+import Loader from '../components/Loader';
 // import {API_URL} from '@env';
 const SignInPage = ({navigation}) => {
   // console.log(API_URL);
-  // const [user, setUser] = useState({});
+  const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
-  const {user, loggedIn} = useSelector(state => state.user);
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com',
+        '936424476577-femae4e8tuslpm8rk9adpcr6bknt4kch.apps.googleusercontent.com',
       offlineAccess: true,
     });
   }, []);
 
-  const firebaseGoogleLogin = async () => {
+  const onPressGoogle = async () => {
+    setLoading(true);
     try {
-      // add any configuration settings here:
-      await GoogleSignin.hasPlayServices();
-      const {idToken, user} = await GoogleSignin.signIn();
+      GoogleSignin.hasPlayServices();
+      const data = await GoogleSignin.signIn();
+      console.log('data', data);
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        data.idToken,
+      );
+      const accessToken = data.idToken;
+      AsyncStorage.setItem(
+        '@loggedInUserID:googleCredentialAccessToken',
+        accessToken,
+      );
+      return auth()
+        .signInWithCredential(credential)
+        .then(result => {
+          setLoading(false);
+          const user = result.user;
+          AsyncStorage.setItem('@loggedInUserID:id', user.uid);
+          const userDict = {
+            id: user.uid,
+            fullname: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          };
+          const data = {
+            ...userDict,
+            appIdentifier: 'rn-android-universal-listings',
+          };
 
-      storeUserDetails({id: user.id, token: idToken, isAuthenticated: true});
-      dispatch(loginAction({idToken}));
+          firestore().collection('users').doc(user.uid).set(data);
+          dispatch(login(userDict));
+          navigation.navigate('Home');
+        });
     } catch (error) {
-      console.log(error);
-      e.log('some other error happened');
+      setLoading(false);
+      console.log('error', error);
     }
-  };
 
-  const _signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      this.setState({userInfo: userInfo, loggedIn: true});
-      console.log(userInfo);
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        console.log('user cancelled the login flow');
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (f.e. sign in) is in progress already
-        console.log('operation (f.e. sign in) is in progress already');
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log('play services not available or outdated');
-      } else {
-        // some other error happened
-        console.log('some other error happened');
-      }
-    }
-  };
-
-  const getCurrentUserInfo = async () => {
-    try {
-      const userInfo = await GoogleSignin.signInSilently();
-      // this.setState({userInfo});
-      dispatch(setUser(userInfo));
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-        // user has not signed in yet
-        console.log('user has not signed in yet');
-        // this.setState({loggedIn: false});
-        dispatch(setUser({loggedIn: false}));
-      } else {
-        // some other error
-        console.log('some other error happened');
-        // this.setState({loggedIn: false});
-        dispatch(setUser({loggedIn: false}));
-      }
-    }
+    // GoogleSignin.signIn().then(data => {
+    // Create a new Firebase credential with the token
+    // const credential = firebase.auth.GoogleAuthProvider.credential(
+    //   data.idToken,
+    // );
+    // Login with the credential
+    // const accessToken = data.idToken;
+    // AsyncStorage.setItem(
+    //   '@loggedInUserID:googleCredentialAccessToken',
+    //   accessToken,
+    // );
+    // return auth().signInWithCredential(credential);
+    // });
+    // .then(result => {
+    //   var user = result.user;
+    //   AsyncStorage.setItem('@loggedInUserID:id', user.uid);
+    //   var userDict = {
+    //     id: user.uid,
+    //     fullname: user.displayName,
+    //     email: user.email,
+    //     photoURL: user.photoURL,
+    //   };
+    //   var data = {
+    //     ...userDict,
+    //     appIdentifier: 'rn-android-universal-listings',
+    //   };
+    //   console.log('data', data);
+    //   firestore().collection('users').doc(user.uid).set(data);
+    //   // dispatch(login(userDict));
+    //   navigation.navigate('DrawerStack', {
+    //     user: userDict,
+    //   });
+    // });
+    // .catch(error => {
+    //   const {message} = error;
+    //   // setLoading(false);
+    //   alert(message);
+    // });
   };
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require('../assets/image/plant.jpg')}
-        style={styles.backgroundImage}>
-        <View style={styles.overlay}>
-          <View style={{marginTop: 100}}>
-            <TouchableOpacity onPress={firebaseGoogleLogin}>
-              <View style={styles.button}>
-                <Image
-                  style={{width: 30, height: 30, marginHorizontal: 10}}
-                  source={require('../assets/image/google.png')}
-                />
-                <Text style={styles.buttonText}>Sign In with Google</Text>
-              </View>
-            </TouchableOpacity>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <View style={styles.container}>
+          <ImageBackground
+            source={require('../assets/image/plant.jpg')}
+            style={styles.backgroundImage}>
+            <View style={styles.overlay}>
+              <View style={{marginTop: 100}}>
+                <TouchableOpacity onPress={onPressGoogle}>
+                  <View style={styles.button}>
+                    <Image
+                      style={{width: 30, height: 30, marginHorizontal: 10}}
+                      source={require('../assets/image/google.png')}
+                    />
+                    <Text style={styles.buttonText}>Sign In with Google</Text>
+                  </View>
+                </TouchableOpacity>
 
-            <TouchableOpacity>
-              <View style={styles.button}>
-                <Image
-                  style={{width: 30, height: 30, marginHorizontal: 10}}
-                  source={require('../assets/image/apple.png')}
-                />
-                <Text style={styles.buttonText}>Sign In with Apple</Text>
+                <TouchableOpacity>
+                  <View style={styles.button}>
+                    <Image
+                      style={{width: 30, height: 30, marginHorizontal: 10}}
+                      source={require('../assets/image/apple.png')}
+                    />
+                    <Text style={styles.buttonText}>Sign In with Apple</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </ImageBackground>
         </View>
-      </ImageBackground>
-    </View>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({
