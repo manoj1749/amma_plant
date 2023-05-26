@@ -1,49 +1,41 @@
 {
   "project_info": {
-    "project_number": "814407182169",
-    "project_id": "ammaplant-b81f2",
-    "storage_bucket": "ammaplant-b81f2.appspot.com"
+    "project_number": "936424476577",
+    "project_id": "myvanam-72c4d",
+    "storage_bucket": "myvanam-72c4d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:814407182169:android:3cc2cfa2a83ffa94364e48",
+        "mobilesdk_app_id": "1:936424476577:android:1e06e3381eb80923e585e0",
         "android_client_info": {
-          "package_name": "com.amma_plant"
+          "package_name": "com.myvanam.my_vanam"
         }
       },
       "oauth_client": [
         {
-          "client_id": "814407182169-bbqj8fefu61vopagh2l37a6gj7rnab95.apps.googleusercontent.com",
+          "client_id": "936424476577-1k3r69o50kihdkrqjfqdd8ldv597b6kc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.amma_plant",
-            "certificate_hash": "b5675c839851f277ac017f95ed3c2d8f21f04831"
+            "package_name": "com.myvanam.my_vanam",
+            "certificate_hash": "f77a699c4c1576270fda26a5d2ae02965b3651e9"
           }
         },
         {
-          "client_id": "814407182169-g7s1gqki8sgpi7fdqtqkjm6knb3epdei.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.amma_plant",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com",
+          "client_id": "936424476577-knits4c61ele3psdo3u1jhuvq6d996c1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDVjyIby0MahYMgwVmCzN4AOtrfXKDnIns"
+          "current_key": "AIzaSyCRvBq8nbhieTc6HPX58JivPogprOljbps"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com",
+              "client_id": "936424476577-knits4c61ele3psdo3u1jhuvq6d996c1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

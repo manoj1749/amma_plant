@@ -16,22 +16,19 @@ import {
   View,
 } from 'react-native';
 
-import SignInPage from './screens/signInScreen';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import HomePage from './stacks/HomePage.stack';
-import {selectUser} from './features/auth/userSlice';
-import {useSelector} from 'react-redux';
-import StackNavigaor from './StackNavigaor';
+import {selectUser} from './apps/redux/slices/userSlice';
+import {Provider, useSelector} from 'react-redux';
 
-const Stack = createStackNavigator();
+import {store} from './apps/redux/store';
+import AppNavigator from './apps/navigation/AppNavigator';
+import Toast from 'react-native-toast-message';
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
   const user = useSelector(selectUser);
   return (
-    <NavigationContainer>
-      <StackNavigaor />
-    </NavigationContainer>
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
   );
 }
 
