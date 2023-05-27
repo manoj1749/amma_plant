@@ -1,6 +1,6 @@
-import {View} from 'react-native';
+import { View } from "react-native";
 // import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from "react-native-maps";
 const MapScreen = () => {
   const [selectedLocation, setSelectedLocation] = React.useState(null);
   const initialRegion = {

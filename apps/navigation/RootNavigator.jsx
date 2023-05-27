@@ -7,24 +7,10 @@ import {
 } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import UserProfile from "../screens/UserProfileScreen";
-import AddImage from "../screens/AddImageScreen";
-import homeScreen from "../screens/HomeScreen";
-import splashScreen from "../screens/splashScreen";
-import { Avatar } from "react-native-paper";
-import { useSelector } from "react-redux";
-import { selectUser, selectUsersDetails } from "../redux/slices/userSlice";
-import SignInPage from "../screens/signInScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import Splash from "../screens/splashScreen";
-import DrawerStack from "../components/NavigatorComponents/DrawerNavigator";
-import Header from "../components/common/Header";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Icons } from "../constants/Icons";
-
 import LoginScreen from "../screens/LoginScreens";
 import UserGroupScreen from "../screens/UserGroupScreen";
-import OrganizationLogin from "../screens/organizationLogin";
+import OrganizationLogin from "../screens/OrganizationLogin";
 import NormalUserLogin from "../screens/NormalUserLogin";
 
 const Stack = createStackNavigator();
