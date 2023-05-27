@@ -39,7 +39,7 @@ export const useGeolocation = () => {
       if (res) {
         Geolocation.getCurrentPosition(
           (position) => {
-            console.log(position);
+            console.log(position.coords);
             setPosition(position);
           },
           (error) => {

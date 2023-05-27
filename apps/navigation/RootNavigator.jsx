@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Image,
+  Pressable,
 } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,32 +13,17 @@ import LoginScreen from "../screens/LoginScreens";
 import UserGroupScreen from "../screens/UserGroupScreen";
 import OrganizationLogin from "../screens/OrganizationLogin";
 import NormalUserLogin from "../screens/NormalUserLogin";
+import Header from "../components/common/Header";
+import { backBtnWhite, backBtnblack } from "../constants/image";
+import DrawerStack from "../components/NavigatorComponents/DrawerNavigator";
 
 const Stack = createStackNavigator();
 const Left = ({ onPress, isBlack }) => (
-  <TouchableHighlight onPress={onPress}>
-    <Image
-      source={
-        isBlack
-          ? require("../assets/image/backblack.png")
-          : require("../assets/image/backWhite.png")
-      }
-    />
-  </TouchableHighlight>
+  <Pressable style={{ marginLeft: 10 }} onPress={onPress}>
+    <Image source={isBlack ? backBtnblack : backBtnWhite} />
+  </Pressable>
 );
-const Headers = ({ onPress, isBlack }) => (
-  <View>
-    <TouchableOpacity onPress={onPress} style={{ marginRight: 15 }}>
-      <Image
-        source={
-          isBlack
-            ? require("../assets/image/backblack.png")
-            : require("../assets/image/backWhite.png")
-        }
-      />
-    </TouchableOpacity>
-  </View>
-);
+
 const LoginStack = () => {
   return (
     <Stack.Navigator>
@@ -45,7 +31,7 @@ const LoginStack = () => {
         options={{
           headerShown: false,
         }}
-        name="Welcome"
+        name="WelcomeScreen"
         component={WelcomeScreen}
       />
       <Stack.Screen
@@ -60,49 +46,49 @@ const LoginStack = () => {
         component={LoginScreen}
       />
       <Stack.Screen
-        options={{
-          headerBackImage: ({ navigation }) => (
+        options={({ navigation, route }) => ({
+          headerBackImage: () => (
             <Left
-              onPress={() => navigation.navigate("WelcomeScreen")}
               isBlack
+              onPress={() => navigation.navigate("WelcomeScreen")}
             />
           ),
           title: "",
           headerTransparent: true,
-        }}
+        })}
         name="UserGroup"
         component={UserGroupScreen}
       />
       <Stack.Screen
-        options={{
-          headerBackImage: ({ navigation }) => (
+        options={({ navigation, route }) => ({
+          headerBackImage: () => (
             <Left onPress={() => navigation.navigate("WelcomeScreen")} />
           ),
           title: "",
           headerTransparent: true,
-        }}
+        })}
         name="OrganizationUser"
         component={OrganizationLogin}
       />
       <Stack.Screen
-        options={{
-          headerBackImage: ({ navigation }) => (
+        options={({ navigation, route }) => ({
+          headerBackImage: () => (
             <Left onPress={() => navigation.navigate("WelcomeScreen")} />
           ),
           title: "",
           headerTransparent: true,
-        }}
+        })}
         name="NormalUserLogin"
         component={NormalUserLogin}
       />
       <Stack.Screen
-        options={{
-          headerBackImage: ({ navigation }) => (
+        options={({ navigation, route }) => ({
+          headerBackImage: () => (
             <Left onPress={() => navigation.navigate("WelcomeScreen")} />
           ),
           title: "",
           headerTransparent: true,
-        }}
+        })}
         name="RegisterUser"
         component={OrganizationLogin}
       />
@@ -114,7 +100,7 @@ const RootNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="LoginStack" component={LoginStack} />
-      {/* <Stack.Screen name="DrawerStack" component={DrawerStack} /> */}
+      <Stack.Screen name="DrawerStack" component={DrawerStack} />
     </Stack.Navigator>
   );
 };

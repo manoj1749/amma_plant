@@ -66,7 +66,7 @@ const UserProfileStack = () => {
         options={({ navigation, route }) => ({
           headerTitle: () => (
             <Header
-              name="Add Image"
+              name="Profile"
               onPressRight={() => navigation.openDrawer()}
               onPressLeft={() => navigation.navigate("Home")}
             />

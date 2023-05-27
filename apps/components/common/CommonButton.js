@@ -11,8 +11,9 @@ const CommonButton = ({
   onPress,
   rightSource,
   leftSource,
+  size,
 }) => {
-  const styles = styling(type);
+  const styles = styling({ type, size });
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -26,18 +27,18 @@ const CommonButton = ({
 
 export default CommonButton;
 
-const styling = (theme) =>
-  //   console.log(theme);
+const styling = ({ type, size }) =>
+  //   console.log(type);
   StyleSheet.create({
     container: {
-      width: 250,
+      width: size === "small" ? 150 : 250,
       height: 44,
       backgroundColor:
-        theme === "lightbtn" ? CommonColor.textColorLight : CommonColor.primary,
+        type === "lightbtn" ? CommonColor.textColorLight : CommonColor.primary,
       borderRadius: 30,
       color: CommonColor.textColorLight,
-      borderWidth: theme === "lightbtn" ? 1 : 0,
-      borderColor: theme === "lightbtn" ? CommonColor.primary : "transparent",
+      borderWidth: type === "lightbtn" ? 1 : 0,
+      borderColor: type === "lightbtn" ? CommonColor.primary : "transparent",
       shadowColor: "#00000020",
       elevation: 25,
       marginVertical: 15,
@@ -50,16 +51,18 @@ const styling = (theme) =>
     },
     text: {
       color:
-        theme === "lightbtn"
+        type === "lightbtn"
           ? CommonColor.primaryText
           : CommonColor.primaryLight,
       fontFamily: "Poppins",
       fontWeight: "bold",
       textTransform: "uppercase",
+      fontSize: size === "small" ? 12 : 15,
+      marginLeft: 10,
     },
     leftIcon: {
       position: "absolute",
-      top: 7,
+      top: 10,
       left: 10,
       //   paddingHorizontal: 8,
     },

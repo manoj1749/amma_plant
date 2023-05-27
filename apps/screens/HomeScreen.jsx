@@ -29,7 +29,7 @@ const HomePage = ({ navigation }) => {
   }, []);
   return (
     <View style={styles.container}>
-      {/* <Map /> */}
+      <Map />
       {/* <MapScreen /> */}
       {/* <FAB
         icon="plus"

@@ -69,6 +69,16 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
   const [state, setState] = React.useState(intailState());
   const [error, position] = useGeolocation();
   const { description, tags, liveLocation, isVisible } = state;
+
+  React.useLayoutEffect(() => {
+    if (liveLocation) {
+      Toast.show({
+        type: "SuccessToast",
+        text1: "Live Location Captured",
+      });
+    }
+  }, [liveLocation]);
+
   const onOpenCameraPopup = () => {
     setOpenCamera(true);
   };
@@ -79,6 +89,11 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
         liveLocation: false,
         isVisible: true,
       }));
+    } else {
+      setState((prev) => ({
+        ...prev,
+        liveLocation: true,
+      }));
     }
   };
   const onClose = () => {
@@ -88,7 +103,7 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
       isVisible: false,
     }));
   };
-  console.log(position);
+  console.log(liveLocation);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,8 +151,10 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
             isVisible={isVisible}
             onClose={onClose}
             children={
-              <View style={{ flex: 1, backgroundColor: "white" }}>
-                <Map />
+              <View
+                style={{ flex: 1, backgroundColor: "white", borderRadius: 10 }}
+              >
+                <Map hideAutoComplete />
               </View>
             }
           />
@@ -152,8 +169,8 @@ export default withCameraAndLibrary(AddImage);
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white" },
   firstContainer: {
-    flex: 0.2,
-    backgroundColor: "#C47A5E10",
+    flex: 0.3,
+    backgroundColor: "#C47A5E05",
     alignItems: "center",
     justifyContent: "center",
   },

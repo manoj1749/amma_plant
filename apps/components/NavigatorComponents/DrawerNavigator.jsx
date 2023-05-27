@@ -1,22 +1,21 @@
-
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import {createDrawerNavigator} from '@react-navigation/drawer'
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import BottomTabNavigator from "./BottomTabNavigation";
 import DrawerContainer from "./DrawerContainer";
-
 
 const Drawer = createDrawerNavigator();
 const DrawerStack = () => (
   <Drawer.Navigator
     screenOptions={{
-      drawerStyle: {outerWidth: 200},
-      drawerPosition: 'left',
+      drawerStyle: { outerWidth: 180 },
+      drawerPosition: "left",
       headerShown: false,
     }}
-    drawerContent={({navigation}) => (
+    drawerContent={({ navigation }) => (
       <DrawerContainer navigation={navigation} />
-    )}>
+    )}
+  >
     <Drawer.Screen name="Tab" component={BottomTabNavigator} />
   </Drawer.Navigator>
 );

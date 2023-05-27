@@ -17,7 +17,7 @@ const AppNavigator = () => {
         config={toastConfig}
         position="top"
         bottomOffset={5}
-        visibilityTime={3000}
+        visibilityTime={2000}
       />
     </>
   );

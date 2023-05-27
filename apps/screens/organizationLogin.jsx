@@ -240,7 +240,7 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
             <View
               style={{
                 position: "absolute",
-                left: 135,
+                left: 130,
                 top: "-7%",
                 elevation: 30,
               }}

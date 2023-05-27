@@ -6,6 +6,10 @@ import {
   lock,
   google,
   appleDark,
+  contribute,
+  sapliing,
+  wallet,
+  userOrange,
 } from "../constants/image";
 const userGroupData = [
   {
@@ -113,4 +117,32 @@ const ProofOptions = [
     name: "Driving License",
   },
 ];
-export { userGroupData, OraganizationDetails, NormalUser, ProofOptions };
+const userProfileDetails = [
+  {
+    id: 1,
+    title: "Contributor",
+    leftSource: contribute,
+  },
+  {
+    id: 2,
+    title: "sapplings",
+    leftSource: sapliing,
+  },
+  {
+    id: 3,
+    title: "Wallet",
+    leftSource: wallet,
+  },
+  {
+    id: 4,
+    title: "My Plant",
+    leftSource: userOrange,
+  },
+];
+export {
+  userGroupData,
+  OraganizationDetails,
+  NormalUser,
+  ProofOptions,
+  userProfileDetails,
+};

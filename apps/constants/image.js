@@ -1,4 +1,5 @@
 export const user = require("../assets/image/user.png");
+export const userOrange = require("../assets/image/userOrange.png");
 export const lock = require("../assets/image/lock.png");
 export const appleWhite = require("../assets/image/appleWhite.png");
 export const appleDark = require("../assets/image/apple.png");
@@ -17,3 +18,9 @@ export const edit = require("../assets/image/edit.png");
 export const plant = require("../assets/image/plant.jpg");
 export const plant1 = require("../assets/image/plant1.png");
 export const nature = require("../assets/image/nature.png");
+export const contribute = require("../assets/image/contripute.png");
+export const sapliing = require("../assets/image/saplings.png");
+export const wallet = require("../assets/image/wallet.png");
+export const addBlack = require("../assets/image/addBlack.png");
+export const home = require("../assets/image/home.png");
+export const logout = require("../assets/image/logout.png");

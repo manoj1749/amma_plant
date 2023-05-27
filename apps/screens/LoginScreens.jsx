@@ -13,15 +13,22 @@ import { CommonColor } from "../constants/colors";
 import { Divider } from "react-native-paper";
 import { lock, plant1, user } from "../constants/image";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [hide, setHide] = React.useState(false);
+  const onLoginHandler = () => {
+    navigation.navigate("DrawerStack");
+  };
   return (
     <View style={styles.container}>
       <ImageBackground source={plant1} style={styles.wrapper}>
         <View style={styles.overlay} />
         <View style={styles.loginContainer}>
           <View>
-            <CommonInput leftSource={user} placeholder="email" />
+            <CommonInput
+              leftSource={user}
+              placeholder="email"
+              placeholderTextColor="#00000090"
+            />
             <CommonInput
               leftSource={lock}
               placeholder="password"
@@ -29,9 +36,14 @@ const LoginScreen = () => {
               rightSideText
               onPress={() => setHide(!hide)}
               hide={hide}
+              placeholderTextColor="#00000090"
             />
             <Text style={styles.forget}>Forget Password ?</Text>
-            <CommonButton type={"lightbtn"} title={"Login"} />
+            <CommonButton
+              type={"lightbtn"}
+              title={"Login"}
+              onPress={onLoginHandler}
+            />
           </View>
           <View>
             <Text style={{ color: "white", marginVertical: 5, fontSize: 10 }}>

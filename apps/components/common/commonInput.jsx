@@ -92,6 +92,7 @@ const styling = ({ isErr }) =>
       fontSize: 15,
       lineHeight: 15,
       elevation: 10,
+      color: "black",
     },
     leftIcon: {
       position: "absolute",

@@ -3,14 +3,7 @@ import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
 import { CommonColor } from "../constants/colors";
 import LottieView from "lottie-react-native";
 
-/*
-  1. Create the config
-*/
 export const toastConfig = {
-  /*
-    Overwrite 'success' type,
-    by modifying the existing `BaseToast` component
-  */
   success: (props) => (
     <BaseToast
       {...props}
@@ -45,13 +38,7 @@ export const toastConfig = {
       }}
     />
   ),
-  /*
-    Or create a completely new type - `tomatoToast`,
-    building the layout from scratch.
 
-    I can consume any custom `props` I want.
-    They will be passed when calling the `show` method (see below)
-  */
   WarningToast: ({ text1, props }) => (
     <View
       style={{
@@ -114,7 +101,7 @@ export const toastConfig = {
       >
         <Text
           style={{
-            color: CommonColor.primary,
+            color: "green",
             fontSize: 13,
             fontWeight: "600",
           }}
