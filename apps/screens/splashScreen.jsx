@@ -16,7 +16,8 @@ export default function Splash({navigation}) {
     setTimeout(async () => {
       setAnimating(true);
       const user = await AsyncStorage.getItem('@loggedInUserID:id');
-      navigation.replace(user ? 'Home' : 'Login');
+      console.log(user)
+      navigation.replace(user ? 'DrawerStack' : 'LoginStack');
     }, 1000);
   }, []);
   async function tryToLoginFirst() {

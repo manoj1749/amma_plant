@@ -67,10 +67,14 @@ const SignInPage = ({navigation}) => {
             ...userDict,
             appIdentifier: 'rn-android-universal-listings',
           };
+          auth().onAuthStateChanged(res =>{
+            console.log(res)
+            AsyncStorage.setItem('@loggedInUserID:id', user.uid);
+          })
 
           firestore().collection('users').doc(user.uid).set(data);
           dispatch(login(userDict));
-          navigation.navigate('Home');
+          navigation.navigate('DrawerStack');
         });
     } catch (error) {
       setLoading(false);

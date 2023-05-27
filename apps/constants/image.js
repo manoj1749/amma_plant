@@ -1,0 +1,16 @@
+export const user = require("../assets/image/user.png");
+export const lock = require("../assets/image/lock.png");
+export const appleWhite = require("../assets/image/appleWhite.png");
+export const appleDark = require("../assets/image/apple.png");
+export const avatarBoy = require("../assets/image/avatarBoy.png");
+export const email = require("../assets/image/email.png");
+export const google = require("../assets/image/google1.png");
+export const mobile = require("../assets/image/mobile.png");
+export const dropdown = require("../assets/image/dropdown.png");
+export const camera = require("../assets/image/camera.png");
+export const library = require("../assets/image/library.png");
+export const backBtnWhite = require("../assets/image/backWhite.png");
+export const backBtnblack = require("../assets/image/backblack.png");
+export const menu = require("../assets/image/menu.png");
+export const add = require("../assets/image/add.png");
+export const edit = require("../assets/image/edit.png");

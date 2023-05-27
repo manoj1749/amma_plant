@@ -43,7 +43,7 @@ const UserProfile = ({navigation}) => {
       });
   };
   return (
-    <View style={{flex: 1, backgroundColor: '#f4ede630'}}>
+    <View style={{flex: 1, backgroundColor: '#ffffff'}}>
       <View
         style={{
           flex: 0.3,
