@@ -14,3 +14,5 @@ export const backBtnblack = require("../assets/image/backblack.png");
 export const menu = require("../assets/image/menu.png");
 export const add = require("../assets/image/add.png");
 export const edit = require("../assets/image/edit.png");
+export const plant = require("../assets/image/plant.jpg");
+export const plant1 = require("../assets/image/plant1.png");

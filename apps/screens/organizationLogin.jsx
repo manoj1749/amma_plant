@@ -13,7 +13,7 @@ import { Avatar } from "react-native-paper";
 import CommonInput from "../components/common/commonInput";
 import { OraganizationDetails, ProofOptions } from "../data/userGroupData";
 import CommonButton from "../components/common/CommonButton";
-import { avatarBoy } from "../constants/image";
+import { avatarBoy, plant1 } from "../constants/image";
 import CommonModal from "../components/common/commonModal";
 import Icon, { Icons } from "../constants/Icons";
 import useAadharVerify from "../hooks/useAadharVerifyHook";
@@ -233,10 +233,7 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/image/plant.jpg")}
-      style={styles.container}
-    >
+    <ImageBackground source={plant1} style={styles.container}>
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <View style={styles.subContainer}>
           {!isKeyboardVisible && (

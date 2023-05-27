@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -8,23 +8,24 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-} from 'react-native';
-import axios from 'axios';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {useDispatch, useSelector} from 'react-redux';
-import firestore from '@react-native-firebase/firestore';
+} from "react-native";
+import axios from "axios";
+import Icon from "react-native-vector-icons/AntDesign";
+import { useDispatch, useSelector } from "react-redux";
+import firestore from "@react-native-firebase/firestore";
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
-} from '@react-native-google-signin/google-signin';
-import auth, {firebase} from '@react-native-firebase/auth';
-import {login, loginAction, setUser} from '../redux/slices/userSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {setTokenId, storeUserDetails} from '../utiltis/utilitis';
-import Loader from '../components/Loader';
+} from "@react-native-google-signin/google-signin";
+import auth, { firebase } from "@react-native-firebase/auth";
+import { login, loginAction, setUser } from "../redux/slices/userSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setTokenId, storeUserDetails } from "../utiltis/utilitis";
+import Loader from "../components/Loader";
+import { plant1 } from "../constants/image";
 // import {API_URL} from '@env';
-const SignInPage = ({navigation}) => {
+const SignInPage = ({ navigation }) => {
   // console.log(API_URL);
   const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const SignInPage = ({navigation}) => {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '936424476577-femae4e8tuslpm8rk9adpcr6bknt4kch.apps.googleusercontent.com',
+        "936424476577-femae4e8tuslpm8rk9adpcr6bknt4kch.apps.googleusercontent.com",
       offlineAccess: true,
     });
   }, []);
@@ -42,21 +43,21 @@ const SignInPage = ({navigation}) => {
     try {
       GoogleSignin.hasPlayServices();
       const data = await GoogleSignin.signIn();
-      console.log('data', data);
+      console.log("data", data);
       const credential = firebase.auth.GoogleAuthProvider.credential(
-        data.idToken,
+        data.idToken
       );
       const accessToken = data.idToken;
       AsyncStorage.setItem(
-        '@loggedInUserID:googleCredentialAccessToken',
-        accessToken,
+        "@loggedInUserID:googleCredentialAccessToken",
+        accessToken
       );
       return auth()
         .signInWithCredential(credential)
-        .then(result => {
+        .then((result) => {
           setLoading(false);
           const user = result.user;
-          AsyncStorage.setItem('@loggedInUserID:id', user.uid);
+          AsyncStorage.setItem("@loggedInUserID:id", user.uid);
           const userDict = {
             id: user.uid,
             fullname: user.displayName,
@@ -65,20 +66,20 @@ const SignInPage = ({navigation}) => {
           };
           const data = {
             ...userDict,
-            appIdentifier: 'rn-android-universal-listings',
+            appIdentifier: "rn-android-universal-listings",
           };
-          auth().onAuthStateChanged(res =>{
-            console.log(res)
-            AsyncStorage.setItem('@loggedInUserID:id', user.uid);
-          })
+          auth().onAuthStateChanged((res) => {
+            console.log(res);
+            AsyncStorage.setItem("@loggedInUserID:id", user.uid);
+          });
 
-          firestore().collection('users').doc(user.uid).set(data);
+          firestore().collection("users").doc(user.uid).set(data);
           dispatch(login(userDict));
-          navigation.navigate('DrawerStack');
+          navigation.navigate("DrawerStack");
         });
     } catch (error) {
       setLoading(false);
-      console.log('error', error);
+      console.log("error", error);
     }
 
     // GoogleSignin.signIn().then(data => {
@@ -126,16 +127,14 @@ const SignInPage = ({navigation}) => {
         <Loader />
       ) : (
         <View style={styles.container}>
-          <ImageBackground
-            source={require('../assets/image/plant.jpg')}
-            style={styles.backgroundImage}>
+          <ImageBackground source={plant1} style={styles.backgroundImage}>
             <View style={styles.overlay}>
-              <View style={{marginTop: 100}}>
+              <View style={{ marginTop: 100 }}>
                 <TouchableOpacity onPress={onPressGoogle}>
                   <View style={styles.button}>
                     <Image
-                      style={{width: 30, height: 30, marginHorizontal: 10}}
-                      source={require('../assets/image/google.png')}
+                      style={{ width: 30, height: 30, marginHorizontal: 10 }}
+                      source={require("../assets/image/google.png")}
                     />
                     <Text style={styles.buttonText}>Sign In with Google</Text>
                   </View>
@@ -144,8 +143,8 @@ const SignInPage = ({navigation}) => {
                 <TouchableOpacity>
                   <View style={styles.button}>
                     <Image
-                      style={{width: 30, height: 30, marginHorizontal: 10}}
-                      source={require('../assets/image/apple.png')}
+                      style={{ width: 30, height: 30, marginHorizontal: 10 }}
+                      source={require("../assets/image/apple.png")}
                     />
                     <Text style={styles.buttonText}>Sign In with Apple</Text>
                   </View>
@@ -164,36 +163,36 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    resizeMode: 'cover',
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    resizeMode: "cover",
   },
   overlay: {
     flex: 1,
-    width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    alignItems: 'center',
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0.1)",
+    alignItems: "center",
   },
   image: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   button: {
     height: 80,
     width: 300,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 10,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
   buttonText: {
-    color: 'black',
+    color: "black",
     fontSize: 18,
     lineHeight: 84,
     letterSpacing: 1,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 export default SignInPage;

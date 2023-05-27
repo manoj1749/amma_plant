@@ -11,16 +11,13 @@ import CommonInput from "../components/common/commonInput";
 import CommonButton from "../components/common/CommonButton";
 import { CommonColor } from "../constants/colors";
 import { Divider } from "react-native-paper";
-import { lock, user } from "../constants/image";
+import { lock, plant1, user } from "../constants/image";
 
-const LoginScreens = () => {
+const LoginScreen = () => {
   const [hide, setHide] = React.useState(false);
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/image/plant.jpg")}
-        style={styles.wrapper}
-      >
+      <ImageBackground source={plant1} style={styles.wrapper}>
         <View style={styles.overlay} />
         <View style={styles.loginContainer}>
           <View>
@@ -55,7 +52,7 @@ const LoginScreens = () => {
   );
 };
 
-export default LoginScreens;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {

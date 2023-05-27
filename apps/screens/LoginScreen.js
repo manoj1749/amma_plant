@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { Button, TextInput } from "react-native-paper";
 import Icon, { Icons } from "../constants/Icons";
+import { plant1 } from "../constants/image";
 const intialState = () => {
   return {
     hidePassword: true,
@@ -20,10 +21,7 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
-          source={require("../assets/image/logoMini.png")}
-          style={styles.image}
-        />
+        <Image source={plant1} style={styles.image} />
       </View>
       <View style={styles.loginForm}>
         <TextInput

@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { appleDark, appleWhite, google } from "../constants/image";
+import { appleDark, appleWhite, google, plant1 } from "../constants/image";
 import { CommonColor } from "../constants/colors";
 import CommonButton from "../components/common/CommonButton";
 import { NormalUser } from "../data/userGroupData";
@@ -15,10 +15,7 @@ import { NormalUser } from "../data/userGroupData";
 const NormalUserLogin = () => {
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/image/plant.jpg")}
-        style={styles.wrapper}
-      >
+      <ImageBackground source={plant1} style={styles.wrapper}>
         <View style={styles.overlay} />
         <View>
           {NormalUser.map(({ id, title, leftSource }) => {

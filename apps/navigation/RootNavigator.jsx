@@ -21,8 +21,8 @@ import DrawerStack from "../components/NavigatorComponents/DrawerNavigator";
 import Header from "../components/common/Header";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Icons } from "../constants/Icons";
-import LoginScreen from "../screens/LoginScreen";
-import LoginScreens from "../screens/LoginScreens";
+
+import LoginScreen from "../screens/LoginScreens";
 import UserGroupScreen from "../screens/UserGroupScreen";
 import OrganizationLogin from "../screens/organizationLogin";
 import NormalUserLogin from "../screens/NormalUserLogin";
@@ -71,7 +71,7 @@ const LoginStack = () => {
           headerTransparent: true,
         }}
         name="Login"
-        component={LoginScreens}
+        component={LoginScreen}
       />
       <Stack.Screen
         options={{
@@ -127,8 +127,8 @@ const LoginStack = () => {
 const RootNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen name="LoginStack" component={LoginStack} /> */}
-      <Stack.Screen name="DrawerStack" component={DrawerStack} />
+      <Stack.Screen name="LoginStack" component={LoginStack} />
+      {/* <Stack.Screen name="DrawerStack" component={DrawerStack} /> */}
     </Stack.Navigator>
   );
 };

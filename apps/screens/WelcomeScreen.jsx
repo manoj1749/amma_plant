@@ -11,6 +11,7 @@ import firebase from "@react-native-firebase/app";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-paper";
 import CommonButton from "../components/common/CommonButton";
+import { plant, plant1 } from "../constants/image";
 
 const WelcomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -59,10 +60,7 @@ const WelcomeScreen = ({ navigation }) => {
   // }
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/image/plant.jpg")}
-        style={styles.wrapper}
-      >
+      <ImageBackground source={plant1} style={styles.wrapper}>
         <View style={styles.overlay} />
         <View style={styles.ButtonContainer}>
           <CommonButton
