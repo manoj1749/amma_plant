@@ -16,3 +16,4 @@ export const add = require("../assets/image/add.png");
 export const edit = require("../assets/image/edit.png");
 export const plant = require("../assets/image/plant.jpg");
 export const plant1 = require("../assets/image/plant1.png");
+export const nature = require("../assets/image/nature.png");

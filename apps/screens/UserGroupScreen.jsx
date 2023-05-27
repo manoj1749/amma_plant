@@ -4,6 +4,7 @@ import { CommonColor } from "../constants/colors";
 import { userGroupData } from "../data/userGroupData";
 import { RadioButton } from "react-native-paper";
 import CommonButton from "../components/common/CommonButton";
+import { nature } from "../constants/image";
 
 const UserGroupScreen = ({ navigation }) => {
   const [value, setValue] = React.useState("Normal User");
@@ -26,7 +27,7 @@ const UserGroupScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 0.5, justifyContent: "center" }}>
-        <Image source={require("../assets/image/nature.svg")} />
+        <Image source={nature} />
       </View>
       <View style={styles.textContainer}>
         <Text
@@ -49,7 +50,7 @@ const UserGroupScreen = ({ navigation }) => {
             return (
               <View key={item.id} style={styles.radioButton}>
                 <RadioButton color={CommonColor.primary} value={item.title} />
-                <Text>{item.title}</Text>
+                <Text style={styles.text}>{item.title}</Text>
               </View>
             );
           })}
@@ -82,5 +83,9 @@ const styles = StyleSheet.create({
   radioButton: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  text: {
+    color: "black",
+    fontWeight: "500",
   },
 });

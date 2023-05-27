@@ -26,6 +26,7 @@ const CommonInput = ({
   keyboardType,
   isErr,
   onFocus,
+  placeholderTextColor,
 }) => {
   const [isHide, setIsHide] = React.useState(false);
   const styles = styling({ isErr });
@@ -41,6 +42,7 @@ const CommonInput = ({
         value={value}
         keyboardType={keyboardType}
         onFocus={onFocus}
+        placeholderTextColor={placeholderTextColor}
       />
 
       {leftSource && <Image source={leftSource} style={styles.leftIcon} />}

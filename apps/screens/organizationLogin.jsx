@@ -240,7 +240,7 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
             <View
               style={{
                 position: "absolute",
-                left: 140,
+                left: 135,
                 top: "-7%",
                 elevation: 30,
               }}
@@ -265,11 +265,39 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : null}
             style={{
-              flex: 0.1,
+              flex: 1,
               alignItems: "center",
               justifyContent: "center",
             }}
           >
+            <View
+              style={{
+                marginVertical: 10,
+                paddingTop: 20,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: CommonColor.primary,
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                Create{" "}
+                <Text
+                  style={{
+                    color: "#00000090",
+                    fontSize: 18,
+                    fontWeight: "400",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Your Account
+                </Text>
+              </Text>
+            </View>
             <View style={styles.loginCard}>
               {filterOraganizationDetails().map(
                 ({
@@ -304,6 +332,7 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
                           extendView: true,
                         }))
                       }
+                      placeholderTextColor="#00000090"
                     />
                   );
                 }
@@ -377,12 +406,11 @@ const styling = ({ isRegisterUser, isKeyboardVisible }) =>
       elevation: 15,
       justifyContent: "center",
       alignItems: "center",
-      paddingTop: 50,
+      paddingTop: 40,
       position: "relative",
     },
     loginCard: {
       alignItems: "center",
-      marginTop: 0,
     },
     card: {
       flex: 0.4,
