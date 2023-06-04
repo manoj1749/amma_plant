@@ -9,7 +9,7 @@ import {
 import { setToken } from "../../utiltis/utilitis";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const serverURL = "http://192.168.183.135:484/api";
+const serverURL = "https://amma-plant.onrender.com/api";
 
 const LoginSuccess = (data) => {
   return {
@@ -58,13 +58,16 @@ export const registerUser = (
       formData.append("role", role);
       formData.append("selectId", selectId);
       formData.append("idNumber", idNumber);
-      const response = await fetch("http://192.168.183.135:4848/api/signup", {
-        method: "POST",
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "https://amma-plant.onrender.com/api/signup",
+        {
+          method: "POST",
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+          body: formData,
+        }
+      );
       const result = await response.json();
       if (result.statuscode === 201) {
         Toast.show({
@@ -94,7 +97,7 @@ export const loginUser = (data, navigation) => {
   return async (dispatch) => {
     dispatch(loginPending());
     try {
-      const res = await fetch("http://192.168.183.135:4848/api/signin", {
+      const res = await fetch("https://amma-plant.onrender.com/api/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
