@@ -1,23 +1,19 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TouchableHighlight,
-  Image,
-  Pressable,
-} from "react-native";
-import React from "react";
+import { Image, Pressable } from "react-native";
+import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import LoginScreen from "../screens/LoginScreens";
 import UserGroupScreen from "../screens/UserGroupScreen";
 import OrganizationLogin from "../screens/OrganizationLogin";
 import NormalUserLogin from "../screens/NormalUserLogin";
-import Header from "../components/common/Header";
 import { backBtnWhite, backBtnblack } from "../constants/image";
 import DrawerStack from "../components/NavigatorComponents/DrawerNavigator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getLoggedinStatus, getToken } from "../utiltis/utilitis";
+import Splash from "../screens/splashScreen";
 
 const Stack = createStackNavigator();
+
 const Left = ({ onPress, isBlack }) => (
   <Pressable style={{ marginLeft: 10 }} onPress={onPress}>
     <Image source={isBlack ? backBtnblack : backBtnWhite} />
@@ -31,14 +27,19 @@ const LoginStack = () => {
         options={{
           headerShown: false,
         }}
+        name="splash"
+        component={Splash}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
         name="WelcomeScreen"
         component={WelcomeScreen}
       />
       <Stack.Screen
         options={{
-          headerBackImage: ({ navigation }) => (
-            <Left onPress={() => navigation.navigate("WelcomeScreen")} />
-          ),
+          headerBackImage: ({ goBack }) => <Left onPress={() => goBack()} />,
           title: "",
           headerTransparent: true,
         }}
@@ -96,7 +97,21 @@ const LoginStack = () => {
   );
 };
 
-const RootNavigator = () => {
+const RootNavigator = ({ navigation }) => {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  React.useEffect(() => {
+    checkLoginState();
+  }, []);
+  const checkLoginState = async () => {
+    try {
+      const isToken = await getToken();
+      if (isToken) {
+        setIsLoggedIn(true);
+      } else {
+        console.log("bye");
+      }
+    } catch (error) {}
+  };
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="LoginStack" component={LoginStack} />

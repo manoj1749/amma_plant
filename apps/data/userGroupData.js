@@ -25,7 +25,23 @@ const userGroupData = [
     title: "Oragainzation User",
   },
 ];
-
+const LoginDetail = [
+  {
+    id: 1,
+    lable: "email",
+    leftSource: email,
+    name: "email",
+    keyboardType: "email-address",
+  },
+  {
+    id: 2,
+    lable: "Password",
+    leftSource: lock,
+    name: "password",
+    rightText: true,
+    passwordInput: true,
+  },
+];
 const OraganizationDetails = [
   {
     id: 1,
@@ -140,6 +156,7 @@ const userProfileDetails = [
   },
 ];
 export {
+  LoginDetail,
   userGroupData,
   OraganizationDetails,
   NormalUser,

@@ -15,37 +15,10 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
 } from "react-native";
-import React, { useEffect } from "react";
-import Animated, {
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/FontAwesome";
-import FontAwesome from "react-native-vector-icons/FontAwesome5Pro";
-import ImagePicker from "react-native-image-crop-picker";
-import { Button } from "react-native-paper";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLocation } from "../redux/slices/mapSlice";
-import Geolocation from "@react-native-community/geolocation";
 import { useGeolocation } from "../hooks/useGeoLocation";
-import Tags from "react-native-tags";
-
-import {
-  selectLoading,
-  selectuploaded,
-  uploadPost,
-} from "../redux/slices/userSlice";
-import { launchImageLibrary, launchCamera } from "react-native-image-picker";
-import ImagePickerContainer from "../components/ImagePickerContainer";
-import ImagePickerModal from "../components/ImagePickerModal";
 import Toast from "react-native-toast-message";
-import { WithContext as ReactTags } from "react-tag-input";
-import firestore from "@react-native-firebase/firestore";
-import storage from "@react-native-firebase/storage";
-import Loader from "../components/Loader";
 import { add, camera, edit } from "../constants/image";
 import CommonSwitch from "../components/common/commonSwitch";
 import CommonInput from "../components/common/commonInput";
@@ -54,7 +27,7 @@ import withCameraAndLibrary from "../HOC/withCameraAndLibrary";
 import CommonModal from "../components/common/commonModal";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Map from "../components/Map";
-import MapView, { Marker } from "react-native-maps";
+import { postAction } from "../redux/action/PostAction";
 
 const intailState = () => {
   return {
@@ -64,13 +37,13 @@ const intailState = () => {
     isVisible: false,
   };
 };
-const AddImage = ({ setOpenCamera, imageUri }) => {
+const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
   const dispatch = useDispatch();
   const [state, setState] = React.useState(intailState());
   const [error, position] = useGeolocation();
   const { description, tags, liveLocation, isVisible } = state;
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (liveLocation) {
       Toast.show({
         type: "SuccessToast",
@@ -78,7 +51,17 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
       });
     }
   }, [liveLocation]);
+  React.useEffect(() => {
+    intailState();
+  }, []);
 
+  const handleChange = (name) => (event) => {
+    event.persist();
+    setState((prev) => ({
+      ...prev,
+      [name]: event?.nativeEvent?.text,
+    }));
+  };
   const onOpenCameraPopup = () => {
     setOpenCamera(true);
   };
@@ -103,7 +86,16 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
       isVisible: false,
     }));
   };
-  console.log(liveLocation);
+  const handleUpdate = () => {
+    const body = {
+      description,
+      tags,
+      longtitude: position.longitude,
+      latitude: position.latitude,
+      imageUri,
+    };
+    dispatch(postAction(body, navigation));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,7 +103,7 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
         <View style={styles.firstContainer}>
           {imageUri ? (
             <ImageBackground
-              source={{ uri: imageUri }}
+              source={{ uri: imageUri.assets[0].uri || imageUri }}
               style={{
                 width: "100%",
                 height: "100%",
@@ -131,8 +123,18 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
           )}
         </View>
         <View style={styles.secondContainer}>
-          <CommonInput name={"description"} placeholder={"Description"} />
-          <CommonInput name={"tags"} placeholder={"Tags"} />
+          <CommonInput
+            name={"description"}
+            placeholder={"Description"}
+            placeholderTextColor="#00000090"
+            onChange={handleChange("description")}
+          />
+          <CommonInput
+            name={"tags"}
+            placeholder={"Tags"}
+            placeholderTextColor="#00000090"
+            onChange={handleChange("tags")}
+          />
           <View style={{ justifyContent: "flex-end" }}>
             <CommonSwitch
               selectionMode={1}
@@ -144,7 +146,11 @@ const AddImage = ({ setOpenCamera, imageUri }) => {
             />
           </View>
 
-          <CommonButton title={"UPLOAD"} />
+          <CommonButton
+            title={"UPLOAD"}
+            onPress={handleUpdate}
+            disabled={description === "" || tags === ""}
+          />
         </View>
         {!liveLocation && (
           <CommonModal
@@ -170,7 +176,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "white" },
   firstContainer: {
     flex: 0.3,
-    backgroundColor: "#C47A5E05",
+    backgroundColor: "#C47A5E10",
     alignItems: "center",
     justifyContent: "center",
   },

@@ -44,7 +44,8 @@ const AddImageStack = () => {
         name="addImage"
         component={AddImage}
         options={({ navigation, route }) => ({
-          headerTitle: () => (
+          headerBackImage: () => null,
+          header: () => (
             <Header
               name="Add Image"
               onPressRight={() => navigation.openDrawer()}
@@ -64,13 +65,15 @@ const UserProfileStack = () => {
         name="Profile"
         component={UserProfile}
         options={({ navigation, route }) => ({
-          headerTitle: () => (
+          headerBackImage: () => null,
+          header: () => (
             <Header
               name="Profile"
               onPressRight={() => navigation.openDrawer()}
               onPressLeft={() => navigation.navigate("Home")}
             />
           ),
+
           headerStyle: styles.headerStyle,
         })}
       />
@@ -139,7 +142,7 @@ const TabButton = (props) => {
   );
 };
 
-export default function BottomTabNavigator() {
+export default function BottomTabNavigator({ navigation }) {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -155,7 +158,6 @@ export default function BottomTabNavigator() {
       }}
     >
       {TabArr.map((item, index) => {
-        console.log(item);
         return (
           <Tab.Screen
             key={index}
@@ -177,13 +179,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  headerStyle: {
-    height: 60,
-    backgroundColor: "#F6EBE7",
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
-    shadowColor: "#C47A5E",
-    elevation: 15,
   },
 });

@@ -21,6 +21,10 @@ import Toast from "react-native-toast-message";
 import { formValidation } from "../helpers/validationForm";
 import withCameraAndLibrary from "../HOC/withCameraAndLibrary";
 import { useKeyboardVisible } from "../hooks/useKeyBoardVisible";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { registerUser } from "../redux/action/AuthAction";
+import { useNavigation } from "@react-navigation/native";
 const intailState = () => {
   return {
     fullName: "",
@@ -30,6 +34,7 @@ const intailState = () => {
     confirmPassword: "",
     idNumber: "",
     selectId: "",
+    checkUri: false,
     isErr: {
       fullName: false,
       email: false,
@@ -48,13 +53,19 @@ const intailState = () => {
   };
 };
 
-const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
+const OrganizationLogin = ({
+  isRegisterUser,
+  setOpenCamera,
+  imageUri,
+  navigation,
+}) => {
   const [state, setState] = React.useState(intailState());
   const isKeyboardVisible = useKeyboardVisible();
-  console.log(isKeyboardVisible);
+
   const {
     fullName,
     openPopup,
+    checkUri,
     selectId,
     idNumber,
     password,
@@ -67,7 +78,9 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
     extendView,
   } = state;
   const styles = styling({ isRegisterUser, isKeyboardVisible });
+  const dispatch = useDispatch();
   const [validate] = useAadharVerify();
+
   React.useEffect(() => {
     if (selectId !== "") {
       console.log(selectId);
@@ -85,6 +98,16 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
       }));
     }
   }, [selectId]);
+  React.useEffect(() => {
+    if (imageUri) {
+      console.log(selectId);
+      setState((prev) => ({
+        ...prev,
+        checkUri: false,
+      }));
+    }
+  }, [imageUri]);
+
   // function for change the input value and store that value in state
   const handleChange = (name) => (event) => {
     event.persist();
@@ -193,10 +216,7 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
     //       }
     //     }
   };
-  const enableEditInput = () => {
-    if (selectId !== "") {
-    }
-  };
+
   const ValidationFrom = () => {
     formValidation(state, setState);
 
@@ -221,9 +241,33 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
     }
   };
   const handleOnSignUp = () => {
-    console.log(state);
-    ValidationFrom();
+    const organizationUserData = {
+      fullname: fullName,
+      email,
+      mobile,
+      image: imageUri,
+      role: isRegisterUser ? "RegisterUser" : "organizationUser",
+      password,
+      confirmPassword,
+    };
+    const regiserUserData = {
+      selectId,
+      idNumber,
+      ...organizationUserData,
+    };
+    // ValidationFrom();
+    dispatch(
+      registerUser(
+        isRegisterUser ? regiserUserData : organizationUserData,
+        navigation
+      )
+    );
+    setState((prev) => ({
+      ...prev,
+      checkUri: imageUri.hasOwnProperty("assets") ? false : true,
+    }));
   };
+  console.log(checkUri, imageUri);
   const filterOraganizationDetails = () => {
     return OraganizationDetails.filter((item) => {
       if (!isRegisterUser) {
@@ -243,6 +287,7 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
                 left: 130,
                 top: "-7%",
                 elevation: 30,
+                alignItems: "center",
               }}
             >
               <Pressable
@@ -251,11 +296,21 @@ const OrganizationLogin = ({ isRegisterUser, setOpenCamera, imageUri }) => {
                 }}
               >
                 <Avatar.Image
-                  size={110}
-                  source={imageUri.length === 0 ? avatarBoy : { uri: imageUri }}
+                  size={120}
+                  source={
+                    imageUri.length === 0
+                      ? avatarBoy
+                      : { uri: imageUri.assets[0].uri || imageUri }
+                  }
                   style={{
                     elevation: 10,
                     backgroundColor: CommonColor.secondary,
+                    borderWidth: checkUri ? 2 : 0,
+                    borderColor: checkUri ? "red" : null,
+                    width: 120,
+                    height: 120,
+                    borderRadius: 100,
+                    alignItems: "center",
                   }}
                 />
               </Pressable>

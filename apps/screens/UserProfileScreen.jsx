@@ -2,50 +2,26 @@ import { View, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { Avatar, Button, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearUser,
-  selectUser,
-  selectUsersDetails,
-  signoutAction,
-} from "../redux/slices/userSlice";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import Icon from "react-native-vector-icons/AntDesign";
-import auth, { firebase } from "@react-native-firebase/auth";
-import { getTokenId, getUserDetails, removeTokenId } from "../utiltis/utilitis";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import auther from "@react-native-firebase/auth";
 import { userProfileDetails } from "../data/userGroupData";
 import CommonButton from "../components/common/CommonButton";
 import CommonInput from "../components/common/commonInput";
 import { avatarBoy } from "../constants/image";
+import { arrayBufferToBase64 } from "../helpers/arrayBufferToBase64";
+import { getLoginId } from "../utiltis/utilitis";
+import { getUserData } from "../redux/action/PostAction";
 
 const UserProfile = ({ navigation }) => {
   const dispatch = useDispatch();
-  const user = useSelector(selectUsersDetails);
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       '814407182169-57gk9a8i2plth612gk3ont22fbt3emmu.apps.googleusercontent.com',
-  //     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  //     // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-  //     // iosClientId: '', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-  //   });
-  //   signOut();
-  // }, []);
-
-  const signOut = () => {
-    // getUserDetails().then(res => {
-    //   console.log('idToken', res.token);
-    //   dispatch(signoutAction());
-    // });
-    // dispatch(signoutAction());
-    auther()
-      .signOut()
-      .then(() => {
-        AsyncStorage.removeItem("@loggedInUserID:id");
-        navigation.navigate("Login");
-      });
-  };
+  const { userDetail } = useSelector((state) => state.post);
+  React.useEffect(() => {
+    getLoginId().then((res) => {
+      console.log(res, "auhhh");
+      dispatch(getUserData(res));
+    }),
+      [];
+  });
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View
@@ -64,7 +40,13 @@ const UserProfile = ({ navigation }) => {
             elevation: 10,
             shadowColor: "#00000050",
           }}
-          source={avatarBoy}
+          source={
+            userDetail
+              ? {
+                  uri: `http://192.168.183.135:4848/${userDetail?.profilePicture}`,
+                }
+              : avatarBoy
+          }
         />
       </View>
       <View
@@ -80,6 +62,8 @@ const UserProfile = ({ navigation }) => {
           name={"fullName"}
           placeholder={"Full Name"}
           isEditable={false}
+          value={userDetail?.fullname || "Full Name"}
+          placeholderTextColor="#00000090"
         />
       </View>
       <View

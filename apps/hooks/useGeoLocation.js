@@ -20,12 +20,10 @@ export const useGeolocation = () => {
           buttonPositive: "OK",
         }
       );
-      console.log("granted", granted);
+
       if (granted === "granted") {
-        console.log("You can use Geolocation");
         return true;
       } else {
-        console.log("You cannot use Geolocation");
         return false;
       }
     } catch (err) {
@@ -35,16 +33,14 @@ export const useGeolocation = () => {
   const getLocation = () => {
     const result = requestLocationPermission();
     result.then((res) => {
-      console.log("res is:", res);
       if (res) {
         Geolocation.getCurrentPosition(
           (position) => {
-            console.log(position.coords);
-            setPosition(position);
+            setPosition(position.coords);
           },
           (error) => {
             // See error code charts below.
-            console.log(error.code, error.message);
+
             setPosition(false);
           },
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }

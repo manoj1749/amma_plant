@@ -12,11 +12,29 @@ import CommonButton from "../components/common/CommonButton";
 import { CommonColor } from "../constants/colors";
 import { Divider } from "react-native-paper";
 import { lock, plant1, user } from "../constants/image";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../redux/action/AuthAction";
+import { LoginDetail } from "../data/userGroupData";
 
 const LoginScreen = ({ navigation }) => {
-  const [hide, setHide] = React.useState(false);
+  const intialState = {
+    email: "",
+    password: "",
+  };
+  const [state, setState] = React.useState(intialState);
+  const { email, password } = state;
+  const dispatch = useDispatch();
+
+  const handleChange = (name) => (event) => {
+    event.persist();
+    setState((prev) => ({
+      ...prev,
+      [name]: event?.nativeEvent?.text,
+    }));
+  };
   const onLoginHandler = () => {
-    navigation.navigate("DrawerStack");
+    const body = { email, password };
+    dispatch(loginUser(body, navigation));
   };
   return (
     <View style={styles.container}>
@@ -24,21 +42,22 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.overlay} />
         <View style={styles.loginContainer}>
           <View>
-            <CommonInput
-              leftSource={user}
-              placeholder="email"
-              placeholderTextColor="#00000090"
-            />
-            <CommonInput
-              leftSource={lock}
-              placeholder="password"
-              passwordInput
-              rightSideText
-              onPress={() => setHide(!hide)}
-              hide={hide}
-              placeholderTextColor="#00000090"
-            />
-            <Text style={styles.forget}>Forget Password ?</Text>
+            {LoginDetail.map(
+              ({ leftSource, name, lable, id, passwordInput }) => {
+                return (
+                  <CommonInput
+                    key={id}
+                    leftSource={leftSource}
+                    placeholder={lable}
+                    passwordInput={passwordInput}
+                    name={name}
+                    onChange={handleChange(name)}
+                    placeholderTextColor="#00000090"
+                  />
+                );
+              }
+            )}
+            {/* <Text style={styles.forget}>Forget Password ?</Text> */}
             <CommonButton
               type={"lightbtn"}
               title={"Login"}

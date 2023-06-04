@@ -7,10 +7,17 @@ const Header = ({ name, onPressRight, onPressLeft, isBlack }) => {
     <View
       style={{
         marginLeft: 5,
+        paddingHorizontal: 5,
         justifyContent: "space-between",
         flexDirection: "row",
         alignItems: "center",
         width: "100%",
+        height: 60,
+        backgroundColor: "#F6EBE7",
+        // borderBottomLeftRadius: 40,
+        // borderBottomRightRadius: 40,
+        shadowColor: "#C47A5E",
+        elevation: 15,
       }}
     >
       <View style={{ flexDirection: "row" }}>

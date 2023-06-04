@@ -7,7 +7,6 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import Icon, { Icons } from "../../constants/Icons";
 import { CommonColor } from "../../constants/colors";
 
 const CommonInput = ({
@@ -27,6 +26,7 @@ const CommonInput = ({
   isErr,
   onFocus,
   placeholderTextColor,
+  onChangeText,
 }) => {
   const [isHide, setIsHide] = React.useState(false);
   const styles = styling({ isErr });
@@ -43,6 +43,7 @@ const CommonInput = ({
         keyboardType={keyboardType}
         onFocus={onFocus}
         placeholderTextColor={placeholderTextColor}
+        onChangeText={onChangeText}
       />
 
       {leftSource && <Image source={leftSource} style={styles.leftIcon} />}

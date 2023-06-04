@@ -20,7 +20,7 @@ export const toastConfig = {
     <ErrorToast
       {...props}
       text1Style={{
-        fontSize: 17,
+        fontSize: 15,
       }}
       text2Style={{
         fontSize: 15,
@@ -141,8 +141,9 @@ export const toastConfig = {
         <Text
           style={{
             color: CommonColor.primary,
-            fontSize: 13,
+            fontSize: 11,
             fontWeight: "600",
+            width: 270,
           }}
         >
           {text1}

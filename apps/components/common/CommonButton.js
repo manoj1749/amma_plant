@@ -12,11 +12,16 @@ const CommonButton = ({
   rightSource,
   leftSource,
   size,
+  disabled,
 }) => {
-  const styles = styling({ type, size });
+  const styles = styling({ type, size, disabled });
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onPress}
+        disabled={disabled}
+      >
         {leftSource && <Image source={leftSource} style={styles.leftIcon} />}
         {rightSource && <Image source={rightSource} style={styles.right} />}
         <Text style={styles.text}>{title}</Text>
@@ -27,14 +32,17 @@ const CommonButton = ({
 
 export default CommonButton;
 
-const styling = ({ type, size }) =>
+const styling = ({ type, size, disabled }) =>
   //   console.log(type);
   StyleSheet.create({
     container: {
       width: size === "small" ? 150 : 250,
       height: 44,
-      backgroundColor:
-        type === "lightbtn" ? CommonColor.textColorLight : CommonColor.primary,
+      backgroundColor: disabled
+        ? "grey"
+        : type === "lightbtn"
+        ? CommonColor.textColorLight
+        : CommonColor.primary,
       borderRadius: 30,
       color: CommonColor.textColorLight,
       borderWidth: type === "lightbtn" ? 1 : 0,

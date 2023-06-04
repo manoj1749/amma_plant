@@ -28,15 +28,13 @@ const useAadharVerify = () => {
   ];
 
   function validate(aadharNumber) {
-    console.log(aadharNumber);
-
     let c = 0;
     let invertedArray = aadharNumber.split("").map(Number).reverse();
-    console.log(invertedArray, "invertedArray");
+
     invertedArray.forEach((val, i) => {
       c = num1[c][num2[i % 8][val]];
     });
-    console.log(c);
+
     return c === 0;
   }
 

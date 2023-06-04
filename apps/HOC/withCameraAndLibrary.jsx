@@ -11,20 +11,24 @@ import CommonModal from "../components/common/commonModal";
 import { CommonColor } from "../constants/colors";
 import { camera, library } from "../constants/image";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 
 const withCameraAndLibrary = (WrappedComponent) => {
-  return (props) => {
+  return ({ navigation }) => {
     const route = useRoute();
     const [openCamera, setOpenCamera] = React.useState(false);
     const [uri, setUri] = React.useState("");
+    React.useEffect(() => {
+      setUri("");
+    }, []);
     const onImageLibraryPress = async () => {
       let options = {
         saveToPhotos: true,
         mediaType: "photo",
       };
       const response = await launchImageLibrary(options);
-      setUri(response.assets[0].uri);
+
+      setUri(response);
       setOpenCamera(false);
     };
 
@@ -46,7 +50,7 @@ const withCameraAndLibrary = (WrappedComponent) => {
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           const response = await launchCamera(options);
-          setUri(response.assets[0].uri);
+          setUri(response);
           setOpenCamera(false);
         } else {
           console.log("Camera permission denied");
@@ -61,6 +65,7 @@ const withCameraAndLibrary = (WrappedComponent) => {
           imageUri={uri}
           setOpenCamera={setOpenCamera}
           isRegisterUser={route?.params?.isRegisterUser}
+          navigation={navigation}
         />
         {openCamera && (
           <CommonModal

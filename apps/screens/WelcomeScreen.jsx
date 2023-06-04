@@ -12,6 +12,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-paper";
 import CommonButton from "../components/common/CommonButton";
 import { plant, plant1 } from "../constants/image";
+import Splash from "./splashScreen";
+import { getToken } from "../utiltis/utilitis";
 
 const WelcomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -58,6 +60,7 @@ const WelcomeScreen = ({ navigation }) => {
   //     <ActivityIndicator style={styles.spinner} size="large" color={'white'} />
   //   );
   // }
+
   return (
     <View style={styles.container}>
       <ImageBackground source={plant1} style={styles.wrapper}>

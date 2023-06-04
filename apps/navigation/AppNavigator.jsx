@@ -9,7 +9,7 @@ const AppNavigator = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <>
+    <React.Fragment>
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
@@ -19,7 +19,7 @@ const AppNavigator = () => {
         bottomOffset={5}
         visibilityTime={2000}
       />
-    </>
+    </React.Fragment>
   );
 };
 

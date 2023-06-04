@@ -1,15 +1,23 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  Pressable,
+} from "react-native";
 import MenuButton from "../../components/MenuButton";
 import { AppIcon } from "../../styles/AppStyles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Avatar } from "react-native-paper";
 import Icon, { Icons } from "../../constants/Icons";
 import { addBlack, avatarBoy, home, logout } from "../../constants/image";
 import { Image } from "react-native-animatable";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DrawerContainer({ navigation }) {
-  const dispatch = useDispatch();
+  const { userDetail } = useSelector((state) => state.post);
+
   const DrawerArr = [
     { route: "HomeStack", Title: "Home", Name: "home", leftSource: home },
     {
@@ -19,12 +27,16 @@ export default function DrawerContainer({ navigation }) {
       leftSource: addBlack,
     },
     {
-      route: "LoginStack",
+      route: "WelcomeScreen",
       Title: "Log Out",
       Name: "logout",
       leftSource: logout,
     },
   ];
+  const onhandleClick = async (route) => {
+    await AsyncStorage.removeItem("token");
+    navigation.navigate(route);
+  };
   return (
     <View style={styles.content}>
       <View style={styles.container}>
@@ -36,16 +48,24 @@ export default function DrawerContainer({ navigation }) {
             padding: 10,
           }}
         >
-          <Avatar.Image
-            size={150}
-            style={{
-              marginHorizontal: 20,
-              backgroundColor: "white",
-              elevation: 10,
-              shadowColor: "#00000050",
-            }}
-            source={avatarBoy}
-          />
+          <Pressable onPress={() => onhandleClick("UserProfileStack")}>
+            <Avatar.Image
+              size={150}
+              style={{
+                marginHorizontal: 20,
+                backgroundColor: "white",
+                elevation: 10,
+                shadowColor: "#00000050",
+              }}
+              source={
+                userDetail
+                  ? {
+                      uri: `http://192.168.183.135:4848/${userDetail?.profilePicture}`,
+                    }
+                  : avatarBoy
+              }
+            />
+          </Pressable>
         </View>
         <View
           style={{
@@ -66,10 +86,12 @@ export default function DrawerContainer({ navigation }) {
                   width: "100%",
                   padding: 10,
                 }}
-                onPress={() => navigation.navigate(item.route)}
+                onPress={() => onhandleClick(item.route)}
               >
                 <Image source={item.leftSource} />
-                <Text style={{ marginLeft: 10 }}>{item.Title}</Text>
+                <Text style={{ marginLeft: 10, color: "#00000061" }}>
+                  {item.Title}
+                </Text>
               </TouchableOpacity>
             );
           })}

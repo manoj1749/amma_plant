@@ -1,25 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { FAB } from "react-native-paper";
 import Map from "../components/Map";
 import Geolocation from "@react-native-community/geolocation";
-import { setLocation } from "../redux/slices/mapSlice";
-import MapScreen from "../components/MapScreen";
-import { getUserDetails } from "../utiltis/utilitis";
-import { getUserDetail, selectUsersDetails } from "../redux/slices/userSlice";
+import { getLoginId, getToken } from "../utiltis/utilitis";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUserData } from "../redux/action/PostAction";
+// import { setLocation } from "../redux/slices/mapSlice";
 
 const HomePage = ({ navigation }) => {
   const dispatch = useDispatch();
-  const user = useSelector(selectUsersDetails);
-  console.log(user, "mmmmmmmmmmmmmmmmmmmmmmmmm");
 
   React.useEffect(() => {
+    getLoginId().then((res) => {
+      console.log(res, "auhhh");
+      dispatch(getUserData(res));
+    });
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
 
-        dispatch(setLocation({ latitude, longitude }));
+        // dispatch(setLocation({ latitude, longitude }));
       },
       (error) => {
         console.log(error.code, error.message);
@@ -30,12 +31,6 @@ const HomePage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Map />
-      {/* <MapScreen /> */}
-      {/* <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={() => navigation.navigate('addImage')}
-      /> */}
     </View>
   );
 };

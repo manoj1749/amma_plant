@@ -1,13 +1,6 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, View, ImageBackground } from "react-native";
 import React from "react";
-import { appleDark, appleWhite, google, plant1 } from "../constants/image";
+import { plant1 } from "../constants/image";
 import { CommonColor } from "../constants/colors";
 import CommonButton from "../components/common/CommonButton";
 import { NormalUser } from "../data/userGroupData";
