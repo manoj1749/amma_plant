@@ -9,7 +9,7 @@ import {
 import { setToken } from "../../utiltis/utilitis";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const serverURL = "https://amma-plant.onrender.com/api";
+const serverURL = "http://123.63.2.13:3000/api";
 
 const LoginSuccess = (data) => {
   return {
@@ -58,16 +58,13 @@ export const registerUser = (
       formData.append("role", role);
       formData.append("selectId", selectId);
       formData.append("idNumber", idNumber);
-      const response = await fetch(
-        "https://amma-plant.onrender.com/api/signup",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch("http://123.63.2.13:3000/api/signup", {
+        method: "POST",
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        body: formData,
+      });
       const result = await response.json();
       if (result.statuscode === 201) {
         Toast.show({
@@ -97,7 +94,7 @@ export const loginUser = (data, navigation) => {
   return async (dispatch) => {
     dispatch(loginPending());
     try {
-      const res = await fetch("https://amma-plant.onrender.com/api/signin", {
+      const res = await fetch("http://123.63.2.13:3000/api/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +102,6 @@ export const loginUser = (data, navigation) => {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      console.log(result);
 
       if (result.statuscode === 200) {
         Toast.show({
@@ -117,6 +113,49 @@ export const loginUser = (data, navigation) => {
         await AsyncStorage.setItem("loginId", result.user.id);
         await AsyncStorage.setItem("isLoggedin", "true");
         navigation.navigate("DrawerStack");
+      } else if (result.statuscode === 400) {
+        Toast.show({
+          type: "ErrorToast",
+          text1: result.message,
+        });
+      } else {
+        Toast.show({
+          type: "ErrorToast",
+          text1: result.error,
+        });
+      }
+      dispatch(loginFailed());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const googleLogin = (idToken) => {
+  return async (dispatch) => {
+    try {
+      console.log(idToken);
+      const response = await fetch(
+        "http://123.63.2.13:3000/api/google-signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: idToken,
+        }
+      );
+      const result = await response.json();
+      console.log(result);
+      if (result.statuscode === 200) {
+        Toast.show({
+          type: "SuccessToast",
+          text1: result.message,
+        });
+        dispatch(LoginSuccess(result.user));
+        await AsyncStorage.setItem("token", result.token);
+        await AsyncStorage.setItem("loginId", result.id);
+        await AsyncStorage.setItem("isLoggedin", "true");
+        // navigation.navigate("DrawerStack");
       } else if (result.statuscode === 400) {
         Toast.show({
           type: "ErrorToast",

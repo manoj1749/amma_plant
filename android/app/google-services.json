@@ -14,15 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "936424476577-1k3r69o50kihdkrqjfqdd8ldv597b6kc.apps.googleusercontent.com",
+          "client_id": "936424476577-fevikk0jujqpi8ustehj3oc9kpolg243.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.myvanam.my_vanam",
-            "certificate_hash": "f77a699c4c1576270fda26a5d2ae02965b3651e9"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "936424476577-knits4c61ele3psdo3u1jhuvq6d996c1.apps.googleusercontent.com",
+          "client_id": "936424476577-femae4e8tuslpm8rk9adpcr6bknt4kch.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "936424476577-knits4c61ele3psdo3u1jhuvq6d996c1.apps.googleusercontent.com",
+              "client_id": "936424476577-femae4e8tuslpm8rk9adpcr6bknt4kch.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

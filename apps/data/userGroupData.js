@@ -120,18 +120,18 @@ const ProofOptions = [
     id: 1,
     name: "Aadhar Card",
   },
-  {
-    id: 2,
-    name: "PAN card",
-  },
-  {
-    id: 3,
-    name: "Voter ID",
-  },
-  {
-    id: 4,
-    name: "Driving License",
-  },
+  // {
+  //   id: 2,
+  //   name: "PAN card",
+  // },
+  // {
+  //   id: 3,
+  //   name: "Voter ID",
+  // },
+  // {
+  //   id: 4,
+  //   name: "Driving License",
+  // },
 ];
 const userProfileDetails = [
   {

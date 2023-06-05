@@ -4,8 +4,26 @@ import { plant1 } from "../constants/image";
 import { CommonColor } from "../constants/colors";
 import CommonButton from "../components/common/CommonButton";
 import { NormalUser } from "../data/userGroupData";
-
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { useDispatch } from "react-redux";
+import { googleLogin } from "../redux/action/AuthAction";
 const NormalUserLogin = () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "936424476577-femae4e8tuslpm8rk9adpcr6bknt4kch.apps.googleusercontent.com",
+    });
+  }, []);
+  const onHandleOpen = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+      dispatch(googleLogin(idToken));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <ImageBackground source={plant1} style={styles.wrapper}>
@@ -18,6 +36,7 @@ const NormalUserLogin = () => {
                 type={"lightbtn"}
                 leftSource={leftSource}
                 title={title}
+                onPress={onHandleOpen}
               />
             );
           })}

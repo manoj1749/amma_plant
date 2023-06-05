@@ -22,7 +22,7 @@ export const postAction = createAsyncThunk(
     formData.append("tags", tags);
     formData.append("longtitude", longtitude);
     formData.append("latitude", latitude);
-    fetch("https://amma-plant.onrender.com/user/post", {
+    fetch("http://123.63.2.13:3000/user/post", {
       method: "POST",
       headers: {
         // Accept: "application/json",
@@ -57,7 +57,7 @@ export const getUserData = (id) => {
   return async (dispatch) => {
     try {
       const response = await fetch(
-        `https://amma-plant.onrender.com/user/getDetails?id=${id}`
+        `http://123.63.2.13:3000/user/getDetails?id=${id}`
       );
       const result = await response.json();
       dispatch(getuserDataAction(result.user));

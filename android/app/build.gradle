@@ -126,10 +126,10 @@ android {
     signingConfigs {
        
         debug {
-            storeFile file('firebase.keystore')
-            storePassword '123456'
-            keyAlias 'fbalias'
-            keyPassword '123456'
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
     }
     buildTypes {

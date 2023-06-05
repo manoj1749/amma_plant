@@ -28,7 +28,7 @@ import CommonModal from "../components/common/commonModal";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Map from "../components/Map";
 import { postAction } from "../redux/action/PostAction";
-
+import { useFocusEffect } from "@react-navigation/native";
 const intailState = () => {
   return {
     description: "",
@@ -51,9 +51,6 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
       });
     }
   }, [liveLocation]);
-  React.useEffect(() => {
-    intailState();
-  }, []);
 
   const handleChange = (name) => (event) => {
     event.persist();
