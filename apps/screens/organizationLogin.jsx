@@ -18,13 +18,10 @@ import CommonModal from "../components/common/commonModal";
 import Icon, { Icons } from "../constants/Icons";
 import useAadharVerify from "../hooks/useAadharVerifyHook";
 import Toast from "react-native-toast-message";
-import { formValidation } from "../helpers/validationForm";
 import withCameraAndLibrary from "../HOC/withCameraAndLibrary";
 import { useKeyboardVisible } from "../hooks/useKeyBoardVisible";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { registerUser } from "../redux/action/AuthAction";
-import { useNavigation } from "@react-navigation/native";
 const intailState = () => {
   return {
     fullName: "",
@@ -217,29 +214,6 @@ const OrganizationLogin = ({
     //     }
   };
 
-  const ValidationFrom = () => {
-    formValidation(state, setState);
-
-    if (password !== confirmPassword) {
-      setState((prev) => ({
-        ...prev,
-        isErr: {
-          ...isErr,
-          password: true,
-          confirmPassword: true,
-        },
-      }));
-    } else if (idNumber !== "") {
-      setState((prev) => ({
-        ...prev,
-        isErr: {
-          ...isErr,
-          isNumber: true,
-        },
-      }));
-    } else {
-    }
-  };
   const handleOnSignUp = () => {
     const organizationUserData = {
       fullname: fullName,
@@ -255,7 +229,7 @@ const OrganizationLogin = ({
       idNumber,
       ...organizationUserData,
     };
-    // ValidationFrom();
+
     dispatch(
       registerUser(
         isRegisterUser ? regiserUserData : organizationUserData,

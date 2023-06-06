@@ -1,0 +1,15 @@
+import {
+  APP_MODE,
+  LOCAL_PORT,
+  PRODUCTION_HOST,
+  REACT_HOST_LOCAL,
+  PRODUCTION_PORT,
+} from "@env";
+
+export default {
+  APP_MODE,
+  LOCAL_PORT,
+  PRODUCTION_HOST,
+  REACT_HOST_LOCAL,
+  PRODUCTION_PORT,
+};

@@ -15,6 +15,8 @@ import { lock, plant1, user } from "../constants/image";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/action/AuthAction";
 import { LoginDetail } from "../data/userGroupData";
+import serverURL from "../helpers/serverURL";
+import config from "../config";
 
 const LoginScreen = ({ navigation }) => {
   const intialState = {
@@ -36,6 +38,8 @@ const LoginScreen = ({ navigation }) => {
     const body = { email, password };
     dispatch(loginUser(body, navigation));
   };
+  serverURL();
+
   return (
     <View style={styles.container}>
       <ImageBackground source={plant1} style={styles.wrapper}>

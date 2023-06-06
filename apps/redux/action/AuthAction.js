@@ -8,8 +8,9 @@ import {
 } from "../actionTypes";
 import { setToken } from "../../utiltis/utilitis";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import serverURL from "../../helpers/serverURL";
 
-const serverURL = "http://123.63.2.13:3000/api";
+console.log(serverURL());
 
 const LoginSuccess = (data) => {
   return {
@@ -58,7 +59,7 @@ export const registerUser = (
       formData.append("role", role);
       formData.append("selectId", selectId);
       formData.append("idNumber", idNumber);
-      const response = await fetch("http://123.63.2.13:3000/api/signup", {
+      const response = await fetch(`${serverURL()}/api/signup`, {
         method: "POST",
         headers: {
           "content-type": "multipart/form-data",
@@ -91,10 +92,11 @@ export const registerUser = (
 };
 
 export const loginUser = (data, navigation) => {
+  console.log(serverURL());
   return async (dispatch) => {
     dispatch(loginPending());
     try {
-      const res = await fetch("http://123.63.2.13:3000/api/signin", {
+      const res = await fetch(`${serverURL()}/api/signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,16 +136,13 @@ export const googleLogin = (idToken) => {
   return async (dispatch) => {
     try {
       console.log(idToken);
-      const response = await fetch(
-        "http://123.63.2.13:3000/api/google-signin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: idToken,
-        }
-      );
+      const response = await fetch(`${serverURL()}/api/google-signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: idToken,
+      });
       const result = await response.json();
       console.log(result);
       if (result.statuscode === 200) {

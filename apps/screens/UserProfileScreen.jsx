@@ -11,17 +11,18 @@ import { avatarBoy } from "../constants/image";
 import { arrayBufferToBase64 } from "../helpers/arrayBufferToBase64";
 import { getLoginId } from "../utiltis/utilitis";
 import { getUserData } from "../redux/action/PostAction";
+import serverURL from "../helpers/serverURL";
 
 const UserProfile = ({ navigation }) => {
   const dispatch = useDispatch();
   const { userDetail } = useSelector((state) => state.post);
+  console.log(userDetail);
   React.useEffect(() => {
     getLoginId().then((res) => {
       console.log(res, "auhhh");
       dispatch(getUserData(res));
-    }),
-      [];
-  });
+    });
+  }, []);
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View
@@ -43,7 +44,7 @@ const UserProfile = ({ navigation }) => {
           source={
             userDetail
               ? {
-                  uri: `http://192.168.183.135:4848/${userDetail?.profilePicture}`,
+                  uri: `${serverURL}/${userDetail?.profilePicture}`,
                 }
               : avatarBoy
           }

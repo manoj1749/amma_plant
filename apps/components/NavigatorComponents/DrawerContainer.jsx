@@ -60,7 +60,7 @@ export default function DrawerContainer({ navigation }) {
               source={
                 userDetail
                   ? {
-                      uri: `http://192.168.183.135:4848/${userDetail?.profilePicture}`,
+                      uri: `${serverURL}/${userDetail?.profilePicture}`,
                     }
                   : avatarBoy
               }
