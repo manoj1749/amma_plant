@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { Avatar, Button, TextInput } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import auther from "@react-native-firebase/auth";
 import { userProfileDetails } from "../data/userGroupData";
 import CommonButton from "../components/common/CommonButton";
 import CommonInput from "../components/common/commonInput";
