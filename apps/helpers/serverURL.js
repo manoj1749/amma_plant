@@ -6,7 +6,7 @@ const serverURL = () => {
     url = `http://${config.REACT_HOST_LOCAL}:${config.LOCAL_PORT}`;
     return url;
   } else {
-    url = `http://${config.PRODUCTION_HOST}:80`;
+    url = `http://${config.PRODUCTION_HOST}:8080`;
     return url;
   }
 };
