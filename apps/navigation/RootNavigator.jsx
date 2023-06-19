@@ -114,7 +114,7 @@ const RootNavigator = ({ navigation }) => {
   };
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen name="LoginStack" component={LoginStack} /> */}
+      <Stack.Screen name="LoginStack" component={LoginStack} />
       <Stack.Screen name="DrawerStack" component={DrawerStack} />
     </Stack.Navigator>
   );
