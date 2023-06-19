@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Map from "../components/Map";
 import Geolocation from "@react-native-community/geolocation";
 import { getLoginId, getToken } from "../utiltis/utilitis";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getUserData } from "../redux/action/PostAction";
+import { getGeolocation } from "../redux/action/AuthAction";
+
 // import { setLocation } from "../redux/slices/mapSlice";
 
 const HomePage = ({ navigation }) => {
@@ -16,6 +17,7 @@ const HomePage = ({ navigation }) => {
       console.log(res, "auhhh");
       dispatch(getUserData(res));
     });
+
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;

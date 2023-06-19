@@ -134,23 +134,23 @@ const ProofOptions = [
   // },
 ];
 const userProfileDetails = [
+  // {
+  //   id: 1,
+  //   title: "Contributor",
+  //   leftSource: contribute,
+  // },
+  // {
+  //   id: 2,
+  //   title: "sapplings",
+  //   leftSource: sapliing,
+  // },
   {
     id: 1,
-    title: "Contributor",
-    leftSource: contribute,
-  },
-  {
-    id: 2,
-    title: "sapplings",
-    leftSource: sapliing,
-  },
-  {
-    id: 3,
     title: "Wallet",
     leftSource: wallet,
   },
   {
-    id: 4,
+    id: 2,
     title: "My Plant",
     leftSource: userOrange,
   },

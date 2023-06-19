@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, View, TouchableOpacity } from "react-native";
 
 const CommonSwitch = ({
   navigation,
@@ -10,6 +10,7 @@ const CommonSwitch = ({
   option2,
   onSelectSwitch,
   selectionColor,
+  isLoadingLocation,
 }) => {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
   const [getRoundCorner, setRoundCorner] = useState(roundCorner);
@@ -31,63 +32,67 @@ const CommonSwitch = ({
       >
         Live Location{" "}
       </Text>
-      <View
-        style={{
-          height: 24,
-          width: 64,
-          backgroundColor: "white",
-          borderRadius: getRoundCorner ? 20 : 0,
-          borderWidth: 1,
-          borderColor: selectionColor,
-          flexDirection: "row",
-          justifyContent: "center",
-          padding: 2,
-        }}
-      >
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => updatedSwitchData(1)}
+      {isLoadingLocation ? (
+        <ActivityIndicator size="small" color="#00ff00" />
+      ) : (
+        <View
           style={{
-            flex: 1,
-
-            backgroundColor: getSelectionMode == 1 ? selectionColor : "white",
+            height: 24,
+            width: 64,
+            backgroundColor: "white",
             borderRadius: getRoundCorner ? 20 : 0,
+            borderWidth: 1,
+            borderColor: selectionColor,
+            flexDirection: "row",
             justifyContent: "center",
-            alignItems: "center",
+            padding: 2,
           }}
         >
-          <Text
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => updatedSwitchData(1)}
             style={{
-              color: getSelectionMode == 1 ? "white" : selectionColor,
-              fontSize: 10,
-            }}
-          >
-            {option1}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          TouchableOpacity
-          activeOpacity={1}
-          onPress={() => updatedSwitchData(2)}
-          style={{
-            flex: 1,
+              flex: 1,
 
-            backgroundColor: getSelectionMode == 2 ? selectionColor : "white",
-            borderRadius: getRoundCorner ? 20 : 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: getSelectionMode == 2 ? "white" : selectionColor,
-              fontSize: 10,
+              backgroundColor: getSelectionMode == 1 ? selectionColor : "white",
+              borderRadius: getRoundCorner ? 20 : 0,
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            {option2}
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <Text
+              style={{
+                color: getSelectionMode == 1 ? "white" : selectionColor,
+                fontSize: 10,
+              }}
+            >
+              {option1}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            TouchableOpacity
+            activeOpacity={1}
+            onPress={() => updatedSwitchData(2)}
+            style={{
+              flex: 1,
+
+              backgroundColor: getSelectionMode == 2 ? selectionColor : "white",
+              borderRadius: getRoundCorner ? 20 : 0,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: getSelectionMode == 2 ? "white" : selectionColor,
+                fontSize: 10,
+              }}
+            >
+              {option2}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/action/AuthAction";
 import { LoginDetail } from "../data/userGroupData";
 import serverURL from "../helpers/serverURL";
-import config from "../config";
 
 const LoginScreen = ({ navigation }) => {
   const intialState = {

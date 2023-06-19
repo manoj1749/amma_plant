@@ -5,6 +5,8 @@ import {
   LOGIN_FAILED,
   LOGIN_PEDNDING,
   LOGIN_SUCCESSFULLY,
+  PENDING_LOCATION,
+  UPDATE_LONG_LAT,
 } from "../actionTypes";
 import { setToken } from "../../utiltis/utilitis";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -26,6 +28,17 @@ const loginFailed = () => {
 const loginPending = () => {
   return {
     type: LOGIN_PEDNDING,
+  };
+};
+const updateLatAndLong = (data) => {
+  return {
+    type: UPDATE_LONG_LAT,
+    payload: data,
+  };
+};
+const pendingLocation = () => {
+  return {
+    type: PENDING_LOCATION,
   };
 };
 
@@ -59,6 +72,7 @@ export const registerUser = (
       formData.append("role", role);
       formData.append("selectId", selectId);
       formData.append("idNumber", idNumber);
+      console.log(serverURL, "hello");
       const response = await fetch(`${serverURL()}/api/signup`, {
         method: "POST",
         headers: {
@@ -170,5 +184,40 @@ export const googleLogin = (idToken) => {
     } catch (error) {
       console.log(error);
     }
+  };
+};
+
+export const fetchLocationName = (lat, long) => {
+  return async (dispatch) => {
+    dispatch(pendingLocation());
+    await fetch(
+      `https://www.mapquestapi.com/geocoding/v1/reverse?key=ee8a3vrSXiTtex2n4cjEVJAjet2Sxjw4&location=${lat}%2C${long}&outFormat=json&thumbMaps=true`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("responseJson", responseJson);
+        const [res] = responseJson.results
+          .map((item) => {
+            return item.locations;
+          })
+          .map((item1) => item1[0]);
+        const [latAndLong] = responseJson.results
+          .map((item) => {
+            return item.providedLocation;
+          })
+          .map((item1) => item1["latLng"]);
+        console.log(latAndLong);
+        dispatch(updateLatAndLong(latAndLong));
+
+        if ([res].length > 0) {
+          Toast.show({
+            type: "SuccessToast",
+            text1: `location set successfully`,
+          });
+        }
+      });
   };
 };

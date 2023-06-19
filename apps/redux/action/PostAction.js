@@ -1,12 +1,32 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import Toast from "react-native-toast-message";
-import { USER_DATA_GET_SUCCESSFULLY } from "../actionTypes";
+import {
+  IMAGE_UPLOADING_FAILED,
+  IMAGE_UPLOADING_PENDING,
+  IMAGE_UPLOADING_SUCCESSFULLY,
+  USER_DATA_GET_SUCCESSFULLY,
+} from "../actionTypes";
 import serverURL from "../../helpers/serverURL";
 
 const getuserDataAction = (data) => {
   return {
     type: USER_DATA_GET_SUCCESSFULLY,
     payload: data,
+  };
+};
+const uploadAssestsAction = () => {
+  return {
+    type: IMAGE_UPLOADING_SUCCESSFULLY,
+  };
+};
+const uploadPendingAction = () => {
+  return {
+    type: IMAGE_UPLOADING_PENDING,
+  };
+};
+const uploadFailedAction = () => {
+  return {
+    type: IMAGE_UPLOADING_FAILED,
   };
 };
 export const postAction = ({
@@ -16,6 +36,7 @@ export const postAction = ({
   longtitude,
   latitude,
 }) => {
+  console.log(longtitude, latitude);
   return async (dispatch) => {
     try {
       if (!imageUri) {
@@ -25,6 +46,7 @@ export const postAction = ({
         });
         return;
       }
+      dispatch(uploadPendingAction());
       const formData = new FormData();
       formData.append("image", {
         uri: imageUri.assets[0].uri,
@@ -49,13 +71,16 @@ export const postAction = ({
           type: "SuccessToast",
           text1: result.message,
         });
-        dispatch(uploadAssestsAction(result.user));
+        dispatch(uploadAssestsAction());
+        return result;
       } else if (result.statuscode === 400) {
+        dispatch(uploadFailedAction());
         Toast.show({
           type: "ErrorToast",
           text1: result.message,
         });
       } else {
+        dispatch(uploadFailedAction());
         Toast.show({
           type: "ErrorToast",
           text1: result.error,

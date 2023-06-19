@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import LoginScreen from "../screens/LoginScreens";
 import UserGroupScreen from "../screens/UserGroupScreen";
-import OrganizationLogin from "../screens/OrganizationLogin";
+import OrganizationLogin from "../screens/organizationLogin";
 import NormalUserLogin from "../screens/NormalUserLogin";
 import { backBtnWhite, backBtnblack } from "../constants/image";
 import DrawerStack from "../components/NavigatorComponents/DrawerNavigator";
@@ -114,7 +114,7 @@ const RootNavigator = ({ navigation }) => {
   };
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="LoginStack" component={LoginStack} />
+      {/* <Stack.Screen name="LoginStack" component={LoginStack} /> */}
       <Stack.Screen name="DrawerStack" component={DrawerStack} />
     </Stack.Navigator>
   );

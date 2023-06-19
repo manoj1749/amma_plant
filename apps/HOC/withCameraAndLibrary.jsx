@@ -19,8 +19,11 @@ const withCameraAndLibrary = (WrappedComponent) => {
     const [openCamera, setOpenCamera] = React.useState(false);
     const [uri, setUri] = React.useState("");
     React.useEffect(() => {
-      setUri("");
-    }, []);
+      const focusHandler = navigation.addListener("focus", () => {
+        setUri("");
+      });
+      return focusHandler;
+    }, [navigation]);
     const onImageLibraryPress = async () => {
       let options = {
         saveToPhotos: true,

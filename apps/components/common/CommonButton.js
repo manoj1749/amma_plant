@@ -70,7 +70,7 @@ const styling = ({ type, size, disabled }) =>
     },
     leftIcon: {
       position: "absolute",
-      top: 5,
+      top: 9,
       left: 10,
       //   paddingHorizontal: 8,
     },

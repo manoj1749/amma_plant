@@ -2,9 +2,13 @@ import {
   LOGIN_FAILED,
   LOGIN_PEDNDING,
   LOGIN_SUCCESSFULLY,
+  PENDING_LOCATION,
+  UPDATE_LONG_LAT,
 } from "../actionTypes";
 const initialState = {
   loading: false,
+  geoLocation: null,
+  isLoadingLocation: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -24,6 +28,17 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
+      };
+    case UPDATE_LONG_LAT:
+      return {
+        ...state,
+        geoLocation: action.payload,
+        isLoadingLocation: false,
+      };
+    case PENDING_LOCATION:
+      return {
+        ...state,
+        isLoadingLocation: true,
       };
     default:
       return state;

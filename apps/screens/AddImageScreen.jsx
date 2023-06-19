@@ -11,6 +11,7 @@ import {
   ScrollView,
   Pressable,
   Dimensions,
+  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
   SafeAreaView,
@@ -29,20 +30,24 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import Map from "../components/Map";
 import { postAction } from "../redux/action/PostAction";
 import { useFocusEffect } from "@react-navigation/native";
+import Loader from "../components/Loader";
+import { fetchLocationName } from "../redux/action/AuthAction";
 const intailState = () => {
   return {
     description: "",
     tags: "",
     liveLocation: true,
     isVisible: false,
+    imageUrL: null,
   };
 };
 const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
   const dispatch = useDispatch();
   const [state, setState] = React.useState(intailState());
+  const { geoLocation, isLoadingLocation } = useSelector((state) => state.auth);
   const [error, position] = useGeolocation();
-  const { description, tags, liveLocation, isVisible } = state;
-
+  const { description, tags, liveLocation, isVisible, imageUrL } = state;
+  console.log("geolocation", imageUrL);
   React.useEffect(() => {
     if (liveLocation) {
       Toast.show({
@@ -51,7 +56,23 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
       });
     }
   }, [liveLocation]);
-
+  React.useEffect(() => {
+    const focusHandler = navigation.addListener("focus", () => {
+      setState((prev) => ({
+        description: "",
+        test: "",
+      }));
+    });
+    return focusHandler;
+  }, [navigation]);
+  React.useEffect(() => {
+    if (imageUri) {
+      setState((prev) => ({
+        ...prev,
+        imageUrL: imageUri,
+      }));
+    }
+  }, [imageUri]);
   const handleChange = (name) => (event) => {
     event.persist();
     setState((prev) => ({
@@ -83,12 +104,21 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
       isVisible: false,
     }));
   };
+  const onLocationSelect = (event) => {
+    const { longitude, latitude } = event.nativeEvent.coordinate;
+    dispatch(fetchLocationName(latitude, longitude));
+    onClose();
+  };
   const handleUpdate = () => {
     const body = {
       description,
       tags,
-      longtitude: position.longitude,
-      latitude: position.latitude,
+      longtitude: liveLocation
+        ? position.longitude
+        : geoLocation.lng || position.longitude,
+      latitude: liveLocation
+        ? position.latitude
+        : geoLocation.lat || position.latitude,
       imageUri,
     };
     dispatch(postAction(body, navigation));
@@ -100,7 +130,7 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
         <View style={styles.firstContainer}>
           {imageUri ? (
             <ImageBackground
-              source={{ uri: imageUri.assets[0].uri || imageUri }}
+              source={{ uri: imageUri.assets[0].uri }}
               style={{
                 width: "100%",
                 height: "100%",
@@ -125,12 +155,14 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
             placeholder={"Description"}
             placeholderTextColor="#00000090"
             onChange={handleChange("description")}
+            value={description}
           />
           <CommonInput
             name={"tags"}
             placeholder={"Tags"}
             placeholderTextColor="#00000090"
             onChange={handleChange("tags")}
+            value={tags}
           />
           <View style={{ justifyContent: "flex-end" }}>
             <CommonSwitch
@@ -140,13 +172,14 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
               option2={"OFF"}
               onSelectSwitch={onSelectSwitch}
               selectionColor={"#C47A5E"}
+              isLoadingLocation={isLoadingLocation}
             />
           </View>
 
           <CommonButton
             title={"UPLOAD"}
             onPress={handleUpdate}
-            disabled={description === "" || tags === ""}
+            disabled={description === ""}
           />
         </View>
         {!liveLocation && (
@@ -155,9 +188,13 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
             onClose={onClose}
             children={
               <View
-                style={{ flex: 1, backgroundColor: "white", borderRadius: 10 }}
+                style={{
+                  flex: 1,
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                }}
               >
-                <Map hideAutoComplete />
+                <Map onLocationSelect={onLocationSelect} />
               </View>
             }
           />
