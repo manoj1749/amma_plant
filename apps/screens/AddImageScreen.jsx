@@ -20,7 +20,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGeolocation } from "../hooks/useGeoLocation";
 import Toast from "react-native-toast-message";
-import { add, camera, edit } from "../constants/image";
+import { add, avatarBoy, camera, edit } from "../constants/image";
 import CommonSwitch from "../components/common/commonSwitch";
 import CommonInput from "../components/common/commonInput";
 import CommonButton from "../components/common/CommonButton";
@@ -32,6 +32,7 @@ import { postAction } from "../redux/action/PostAction";
 import { useFocusEffect } from "@react-navigation/native";
 import Loader from "../components/Loader";
 import { fetchLocationName } from "../redux/action/AuthAction";
+import { DELETE_LOCATION } from "../redux/actionTypes";
 const intailState = () => {
   return {
     description: "",
@@ -44,18 +45,35 @@ const intailState = () => {
 const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
   const dispatch = useDispatch();
   const [state, setState] = React.useState(intailState());
-  const { geoLocation, isLoadingLocation } = useSelector((state) => state.auth);
+  const { geoLocation, isLoadingLocation, selectedLocation } = useSelector(
+    (state) => state.auth
+  );
+  const { isUploadLoading } = useSelector((state) => state.post);
   const [error, position] = useGeolocation();
   const { description, tags, liveLocation, isVisible, imageUrL } = state;
-  console.log("geolocation", imageUrL);
+  console.log("geoLocation", liveLocation, selectedLocation);
   React.useEffect(() => {
     if (liveLocation) {
       Toast.show({
         type: "SuccessToast",
         text1: "Live Location Captured",
       });
+      dispatch({
+        type: DELETE_LOCATION,
+      });
     }
   }, [liveLocation]);
+  React.useEffect(() => {
+    if (imageUri) {
+      const data = imageUri.hasOwnProperty("didCancel")
+        ? null
+        : imageUri.assets[0].uri;
+      setState((prev) => ({
+        ...prev,
+        imageUrL: data,
+      }));
+    }
+  }, [imageUri]);
   React.useEffect(() => {
     const focusHandler = navigation.addListener("focus", () => {
       setState((prev) => ({
@@ -65,14 +83,7 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
     });
     return focusHandler;
   }, [navigation]);
-  React.useEffect(() => {
-    if (imageUri) {
-      setState((prev) => ({
-        ...prev,
-        imageUrL: imageUri,
-      }));
-    }
-  }, [imageUri]);
+
   const handleChange = (name) => (event) => {
     event.persist();
     setState((prev) => ({
@@ -123,14 +134,17 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
     };
     dispatch(postAction(body, navigation));
   };
-
+  console.log(
+    geoLocation && Object.values(geoLocation).length === 2,
+    "imageUri"
+  );
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={{ flex: 1 }}>
         <View style={styles.firstContainer}>
-          {imageUri ? (
+          {imageUrL ? (
             <ImageBackground
-              source={{ uri: imageUri.assets[0].uri }}
+              source={{ uri: imageUrL }}
               style={{
                 width: "100%",
                 height: "100%",
@@ -179,7 +193,8 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
           <CommonButton
             title={"UPLOAD"}
             onPress={handleUpdate}
-            disabled={description === ""}
+            disabled={description === "" || imageUrL === null}
+            isLoading={isUploadLoading}
           />
         </View>
         {!liveLocation && (

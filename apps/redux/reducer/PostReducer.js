@@ -6,7 +6,7 @@ import {
 } from "../actionTypes";
 const initialState = {
   userDetail: null,
-  isLoading: false,
+  isUploadLoading: false,
 };
 
 const postReducer = (state = initialState, action) => {
@@ -19,17 +19,17 @@ const postReducer = (state = initialState, action) => {
     case IMAGE_UPLOADING_PENDING:
       return {
         ...state,
-        isLoading: true,
+        isUploadLoading: true,
       };
     case IMAGE_UPLOADING_SUCCESSFULLY:
       return {
         ...state,
-        isLoading: false,
+        isUploadLoading: false,
       };
     case IMAGE_UPLOADING_FAILED:
       return {
         ...state,
-        isLoading: false,
+        isUploadLoading: false,
       };
 
     default:

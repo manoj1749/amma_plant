@@ -1,4 +1,11 @@
-import { StyleSheet, TouchableOpacity, Text, View, Image } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import React from "react";
 import { Button } from "react-native-paper";
 import { CommonColor } from "../../constants/colors";
@@ -13,18 +20,24 @@ const CommonButton = ({
   leftSource,
   size,
   disabled,
+  isLoading,
 }) => {
-  const styles = styling({ type, size, disabled });
+  const isDisabled = isLoading || disabled;
+  const styles = styling({ type, size, isDisabled });
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
         onPress={onPress}
-        disabled={disabled}
+        disabled={isDisabled}
       >
         {leftSource && <Image source={leftSource} style={styles.leftIcon} />}
         {rightSource && <Image source={rightSource} style={styles.right} />}
-        <Text style={styles.text}>{title}</Text>
+        {isLoading ? (
+          <ActivityIndicator color={"white"} />
+        ) : (
+          <Text style={styles.text}>{title}</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -32,13 +45,13 @@ const CommonButton = ({
 
 export default CommonButton;
 
-const styling = ({ type, size, disabled }) =>
+const styling = ({ type, size, isDisabled }) =>
   //   console.log(type);
   StyleSheet.create({
     container: {
       width: size === "small" ? 150 : 250,
       height: 44,
-      backgroundColor: disabled
+      backgroundColor: isDisabled
         ? "grey"
         : type === "lightbtn"
         ? CommonColor.textColorLight

@@ -1,4 +1,5 @@
 import {
+  DELETE_LOCATION,
   LOGIN_FAILED,
   LOGIN_PEDNDING,
   LOGIN_SUCCESSFULLY,
@@ -9,6 +10,7 @@ const initialState = {
   loading: false,
   geoLocation: null,
   isLoadingLocation: false,
+  selectedLocation: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -34,11 +36,18 @@ const authReducer = (state = initialState, action) => {
         ...state,
         geoLocation: action.payload,
         isLoadingLocation: false,
+        selectedLocation: true,
       };
     case PENDING_LOCATION:
       return {
         ...state,
         isLoadingLocation: true,
+      };
+    case DELETE_LOCATION:
+      return {
+        ...state,
+        geoLocation: null,
+        selectedLocation: false,
       };
     default:
       return state;

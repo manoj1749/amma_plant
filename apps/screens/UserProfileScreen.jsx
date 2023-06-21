@@ -15,7 +15,7 @@ import serverURL from "../helpers/serverURL";
 const UserProfile = ({ navigation }) => {
   const dispatch = useDispatch();
   const { userDetail } = useSelector((state) => state.post);
-  console.log(userDetail);
+  console.log("userDetail", userDetail);
   React.useEffect(() => {
     getLoginId().then((res) => {
       console.log(res, "auhhh");
@@ -43,7 +43,7 @@ const UserProfile = ({ navigation }) => {
           source={
             userDetail
               ? {
-                  uri: `${serverURL()}/${userDetail?.profilePicture}`,
+                  uri: `http://123.63.2.13/${userDetail?.profilePicture}`,
                 }
               : avatarBoy
           }
