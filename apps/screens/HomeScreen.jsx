@@ -17,18 +17,6 @@ const HomePage = ({ navigation }) => {
       console.log(res, "auhhh");
       dispatch(getUserData(res));
     });
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-
-        // dispatch(setLocation({ latitude, longitude }));
-      },
-      (error) => {
-        console.log(error.code, error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
   }, []);
   return (
     <View style={styles.container}>

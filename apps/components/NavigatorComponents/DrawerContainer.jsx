@@ -86,6 +86,7 @@ export default function DrawerContainer({ navigation }) {
                   width: "100%",
                   padding: 10,
                 }}
+                key={index}
                 onPress={() => onhandleClick(item.route)}
               >
                 <Image source={item.leftSource} />

@@ -9,7 +9,7 @@ const CommonModal = ({ isVisible, onClose, children, isBottom }) => {
   return (
     <ReactNativeModal
       isVisible={isVisible}
-      swipeDirection="down"
+      // swipeDirection="down"
       onBackButtonPress={onClose}
       onBackdropPress={onClose}
       style={styles.modal}

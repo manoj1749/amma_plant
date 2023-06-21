@@ -51,7 +51,7 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
   const { isUploadLoading } = useSelector((state) => state.post);
   const [error, position] = useGeolocation();
   const { description, tags, liveLocation, isVisible, imageUrL } = state;
-  console.log("geoLocation", liveLocation, selectedLocation);
+  console.log(position, "add image p[ostioj");
   React.useEffect(() => {
     if (liveLocation) {
       Toast.show({

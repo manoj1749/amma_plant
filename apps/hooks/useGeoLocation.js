@@ -5,8 +5,8 @@ import Geolocation from "@react-native-community/geolocation";
 export const useGeolocation = () => {
   const [error, setError] = useState("");
   const [position, setPosition] = useState({
-    latitude: 0,
-    longitude: 0,
+    latitude: 9.095046666666667,
+    longitude: 76.492455,
   });
   const requestLocationPermission = async () => {
     try {

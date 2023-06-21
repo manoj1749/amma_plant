@@ -8,7 +8,7 @@ import { fetchLocationName } from "../redux/action/AuthAction";
 const Map = ({ onLocationSelect = () => {} }) => {
   const [error, position] = useGeolocation();
   const styles = styling();
-
+  console.log(position, "position");
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <MapView
@@ -21,11 +21,13 @@ const Map = ({ onLocationSelect = () => {} }) => {
         Region={position}
         onPress={onLocationSelect}
       >
-        <Marker
-          draggable
-          coordinate={position}
-          onDragEnd={(e) => console.log(e)}
-        />
+        {position && (
+          <Marker
+            draggable
+            coordinate={position}
+            onDragEnd={(e) => console.log(e)}
+          />
+        )}
       </MapView>
     </SafeAreaView>
   );
