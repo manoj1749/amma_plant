@@ -5,12 +5,19 @@ import {
   IMAGE_UPLOADING_PENDING,
   IMAGE_UPLOADING_SUCCESSFULLY,
   USER_DATA_GET_SUCCESSFULLY,
+  USER_IMAGE_GET_SUCCESSFULLY,
 } from "../actionTypes";
 import serverURL from "../../helpers/serverURL";
 
 const getuserDataAction = (data) => {
   return {
     type: USER_DATA_GET_SUCCESSFULLY,
+    payload: data,
+  };
+};
+const getuserImagesAction = (data) => {
+  return {
+    type: USER_IMAGE_GET_SUCCESSFULLY,
     payload: data,
   };
 };
@@ -35,6 +42,7 @@ export const postAction = ({
   tags,
   longtitude,
   latitude,
+  id,
 }) => {
   console.log(longtitude, latitude);
   return async (dispatch) => {
@@ -43,6 +51,13 @@ export const postAction = ({
         Toast.show({
           type: "ErrorToast",
           text1: "Please select image",
+        });
+        return;
+      }
+      if (!longtitude && !latitude) {
+        Toast.show({
+          type: "ErrorToast",
+          text1: "Please select location",
         });
         return;
       }
@@ -57,6 +72,7 @@ export const postAction = ({
       formData.append("tags", tags);
       formData.append("longtitude", longtitude);
       formData.append("latitude", latitude);
+      formData.append("id", id);
       const response = await fetch(`${serverURL()}/user/post`, {
         method: "POST",
         headers: {
@@ -142,6 +158,18 @@ export const getUserData = (id) => {
       const response = await fetch(`${serverURL()}/user/getDetails?id=${id}`);
       const result = await response.json();
       dispatch(getuserDataAction(result.user));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+export const getImageByid = (id) => {
+  console.log(id);
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`${serverURL()}/user/getImages?id=${id}`);
+      const result = await response.json();
+      dispatch(getuserImagesAction(result.user));
     } catch (error) {
       console.log(error);
     }

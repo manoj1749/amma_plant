@@ -1,7 +1,16 @@
 import React, { Component } from "react";
 import Swiper from "react-native-deck-swiper";
-import { Button, StyleSheet, Text, View } from "react-native";
-
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import { useSelector } from "react-redux";
+import serverURL from "../../../helpers/serverURL";
+import moment from "moment";
 // demo purposes only
 function* range(start, end) {
   for (let i = start; i <= end; i++) {
@@ -9,17 +18,56 @@ function* range(start, end) {
   }
 }
 const Card = () => {
+  const { userImageDetails } = useSelector((state) => state.post);
+
   const [state, setState] = React.useState({
     cards: [...range(1, 50)],
     swipedAllCards: false,
     swipeDirection: "",
     cardIndex: 0,
   });
+  console.log(state.cards);
   const useSwiper = React.useRef();
   const renderCard = (card, index) => {
+    const time = moment(card.createdAt);
     return (
       <View style={styles.card}>
-        <Text style={styles.text}>image{index}</Text>
+        <Image
+          style={{ flex: 1, borderRadius: 50 }}
+          source={{ uri: `${serverURL()}/${card.imageUrl}` }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            backgroundColor: "#00000080",
+            width: "100%",
+            height: 90,
+            borderBottomLeftRadius: 50,
+            borderBottomRightRadius: 50,
+          }}
+        >
+          <View
+            style={{ alignItems: "center", flexDirection: "row", padding: 5 }}
+          >
+            <Text style={{ color: "white", fontSize: 17, fontWeight: "700" }}>
+              Description:
+            </Text>
+            <Text style={{ color: "white", marginLeft: 2 }}>
+              {card.description}
+            </Text>
+          </View>
+          <View
+            style={{ alignItems: "center", flexDirection: "row", padding: 5 }}
+          >
+            <Text style={{ color: "white", fontSize: 17, fontWeight: "700" }}>
+              Date:
+            </Text>
+            <Text style={{ color: "white", marginLeft: 2 }}>
+              {time.format("DD/MM/YY HH:mm")}
+            </Text>
+          </View>
+        </View>
       </View>
     );
   };
@@ -43,14 +91,14 @@ const Card = () => {
     <View style={styles.container}>
       <Swiper
         ref={useSwiper}
-        cardStyle={{ backgroundColor: "salmon", width: "100%" }}
+        cardStyle={{ backgroundColor: "#F6EBE7", width: "100%" }}
         onSwiped={() => onSwiped("general")}
         onSwipedLeft={() => onSwiped("left")}
         onSwipedRight={() => onSwiped("right")}
         onSwipedTop={() => onSwiped("top")}
         onSwipedBottom={() => onSwiped("bottom")}
         onTapCard={swipeLeft}
-        cards={state.cards}
+        cards={userImageDetails}
         cardIndex={state.cardIndex}
         cardVerticalMargin={35}
         cardHorizontalMargin={0}
@@ -134,12 +182,31 @@ const Card = () => {
         // animateCardOpacity
         swipeBackCard
       >
-        <Button
-          color={"salmon"}
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#F6EBE7",
+            flex: 0.1,
+          }}
           onPress={() => useSwiper.current.swipeBack()}
-          title="Swipe Back"
-          style={{ color: "red" }}
-        />
+        >
+          <Text
+            style={{
+              color: "black",
+              fontSize: 15,
+              fontWeight: 700,
+              marginBottom: 5,
+            }}
+          >
+            Back
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
+        >
+          <Text style={{ fontSize: 18, fontWeight: "800" }}>No Image</Text>
+        </View>
       </Swiper>
     </View>
   );
@@ -154,17 +221,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   card: {
-    flex: 0.5,
-    borderRadius: 4,
+    flex: 0.6,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
     borderWidth: 2,
     borderColor: "#E8E8E8",
-    // justifyContent: "center",
+    justifyContent: "center",
     backgroundColor: "white",
   },
   text: {
     textAlign: "center",
     fontSize: 50,
     backgroundColor: "transparent",
+    position: "relative",
   },
   done: {
     textAlign: "center",

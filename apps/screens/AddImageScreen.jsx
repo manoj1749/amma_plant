@@ -48,10 +48,10 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
   const { geoLocation, isLoadingLocation, selectedLocation } = useSelector(
     (state) => state.auth
   );
-  const { isUploadLoading } = useSelector((state) => state.post);
+  const { isUploadLoading, userDetail } = useSelector((state) => state.post);
   const [error, position] = useGeolocation();
   const { description, tags, liveLocation, isVisible, imageUrL } = state;
-  console.log(position, "add image p[ostioj");
+
   React.useEffect(() => {
     if (liveLocation) {
       Toast.show({
@@ -77,8 +77,10 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
   React.useEffect(() => {
     const focusHandler = navigation.addListener("focus", () => {
       setState((prev) => ({
+        ...prev,
         description: "",
         test: "",
+        imageUrL: null,
       }));
     });
     return focusHandler;
@@ -121,23 +123,27 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
     onClose();
   };
   const handleUpdate = () => {
+    console.log(liveLocation, geoLocation, "hghghghghgh");
     const body = {
       description,
       tags,
       longtitude: liveLocation
         ? position.longitude
-        : geoLocation.lng || position.longitude,
+        : geoLocation
+        ? geoLocation.lat
+        : position.longitude,
       latitude: liveLocation
         ? position.latitude
-        : geoLocation.lat || position.latitude,
+        : geoLocation
+        ? geoLocation.lat
+        : position.latitude,
       imageUri,
+      id: userDetail.id,
     };
     dispatch(postAction(body, navigation));
+    setState(intailState());
   };
-  console.log(
-    geoLocation && Object.values(geoLocation).length === 2,
-    "imageUri"
-  );
+  console.log(liveLocation);
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={{ flex: 1 }}>

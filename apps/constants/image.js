@@ -24,3 +24,5 @@ export const wallet = require("../assets/image/wallet.png");
 export const addBlack = require("../assets/image/addBlack.png");
 export const home = require("../assets/image/home.png");
 export const logout = require("../assets/image/logout.png");
+export const addColor = require("../assets/image/addColor.png");
+export const homeColor = require("../assets/image/homeColor.png");

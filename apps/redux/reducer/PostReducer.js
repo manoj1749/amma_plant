@@ -3,10 +3,12 @@ import {
   IMAGE_UPLOADING_PENDING,
   IMAGE_UPLOADING_SUCCESSFULLY,
   USER_DATA_GET_SUCCESSFULLY,
+  USER_IMAGE_GET_SUCCESSFULLY,
 } from "../actionTypes";
 const initialState = {
   userDetail: null,
   isUploadLoading: false,
+  userImageDetails: [],
 };
 
 const postReducer = (state = initialState, action) => {
@@ -30,6 +32,11 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         isUploadLoading: false,
+      };
+    case USER_IMAGE_GET_SUCCESSFULLY:
+      return {
+        ...state,
+        userImageDetails: action.payload,
       };
 
     default:

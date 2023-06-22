@@ -9,7 +9,7 @@ import CommonInput from "../components/common/commonInput";
 import { avatarBoy } from "../constants/image";
 
 import { getLoginId } from "../utiltis/utilitis";
-import { getUserData } from "../redux/action/PostAction";
+import { getImageByid, getUserData } from "../redux/action/PostAction";
 import serverURL from "../helpers/serverURL";
 
 import Component from "../components/common/card/card";
@@ -21,11 +21,12 @@ const UserProfile = ({ navigation }) => {
     enableCards: false,
   });
   const { enableCards } = state;
-  console.log("userDetail", userDetail);
+
   React.useEffect(() => {
     getLoginId().then((res) => {
       console.log(res, "auhhh");
       dispatch(getUserData(res));
+      dispatch(getImageByid(res));
     });
   }, []);
   const onHandlePress = (title) => {
