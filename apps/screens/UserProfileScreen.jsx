@@ -36,6 +36,12 @@ const UserProfile = ({ navigation }) => {
       }));
     }
   };
+  const onClose = (title) => {
+    setState((prev) => ({
+      ...prev,
+      enableCards: false,
+    }));
+  };
   console.log(`${serverURL()}/${userDetail?.profilePicture}`);
   return (
     <>
@@ -106,7 +112,11 @@ const UserProfile = ({ navigation }) => {
         </View>
       </View>
       {enableCards && (
-        <CommonModal isVisible={enableCards} children={<Component />} />
+        <CommonModal
+          isVisible={enableCards}
+          onClose={onClose}
+          children={<Component />}
+        />
       )}
     </>
   );
