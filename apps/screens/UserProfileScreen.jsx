@@ -23,12 +23,15 @@ const UserProfile = ({ navigation }) => {
   const { enableCards } = state;
 
   React.useEffect(() => {
-    getLoginId().then((res) => {
-      console.log(res, "auhhh");
-      dispatch(getUserData(res));
-      dispatch(getImageByid(res));
+    const focusHandler = navigation.addListener("focus", () => {
+      getLoginId().then((res) => {
+        console.log(res, "auhhh");
+        dispatch(getUserData(res));
+        dispatch(getImageByid(res));
+      });
     });
-  }, []);
+    focusHandler;
+  }, [navigation]);
   const onHandlePress = (title) => {
     if (title === "My Plant") {
       setState((prev) => ({

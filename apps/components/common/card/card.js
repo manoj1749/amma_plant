@@ -21,7 +21,7 @@ const Card = () => {
   const { userImageDetails } = useSelector((state) => state.post);
 
   const [state, setState] = React.useState({
-    cards: [...range(1, 50)],
+    cards: [...range(0, 0)],
     swipedAllCards: false,
     swipeDirection: "",
     cardIndex: 0,
@@ -32,42 +32,62 @@ const Card = () => {
     const time = moment(card.createdAt);
     return (
       <View style={styles.card}>
-        <Image
-          style={{ flex: 1, borderRadius: 50 }}
-          source={{ uri: `${serverURL()}/${card.imageUrl}` }}
-        />
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            backgroundColor: "#00000080",
-            width: "100%",
-            height: 90,
-            borderBottomLeftRadius: 50,
-            borderBottomRightRadius: 50,
-          }}
-        >
-          <View
-            style={{ alignItems: "center", flexDirection: "row", padding: 5 }}
-          >
-            <Text style={{ color: "white", fontSize: 17, fontWeight: "700" }}>
-              Description:
-            </Text>
-            <Text style={{ color: "white", marginLeft: 2 }}>
-              {card.description}
-            </Text>
+        {userImageDetails.length > 0 ? (
+          <>
+            <Image
+              style={{ flex: 1, borderRadius: 50 }}
+              source={{ uri: `${serverURL()}/${card.imageUrl}` }}
+            />
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                backgroundColor: "#00000080",
+                width: "100%",
+                height: 90,
+                borderBottomLeftRadius: 50,
+                borderBottomRightRadius: 50,
+              }}
+            >
+              <View
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  padding: 5,
+                }}
+              >
+                <Text
+                  style={{ color: "white", fontSize: 17, fontWeight: "700" }}
+                >
+                  Description:
+                </Text>
+                <Text style={{ color: "white", marginLeft: 2 }}>
+                  {card.description}
+                </Text>
+              </View>
+              <View
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  padding: 5,
+                }}
+              >
+                <Text
+                  style={{ color: "white", fontSize: 17, fontWeight: "700" }}
+                >
+                  Date:
+                </Text>
+                <Text style={{ color: "white", marginLeft: 2 }}>
+                  {time.format("DD/MM/YY HH:mm")}
+                </Text>
+              </View>
+            </View>
+          </>
+        ) : (
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Text>No images</Text>
           </View>
-          <View
-            style={{ alignItems: "center", flexDirection: "row", padding: 5 }}
-          >
-            <Text style={{ color: "white", fontSize: 17, fontWeight: "700" }}>
-              Date:
-            </Text>
-            <Text style={{ color: "white", marginLeft: 2 }}>
-              {time.format("DD/MM/YY HH:mm")}
-            </Text>
-          </View>
-        </View>
+        )}
       </View>
     );
   };
@@ -87,6 +107,7 @@ const Card = () => {
     console.log("hello", useSwiper);
     useSwiper.current.swipeLeft();
   };
+  console.log(userImageDetails, "knffjbjfdjfngufgn");
   return (
     <View style={styles.container}>
       <Swiper
@@ -98,7 +119,7 @@ const Card = () => {
         onSwipedTop={() => onSwiped("top")}
         onSwipedBottom={() => onSwiped("bottom")}
         onTapCard={swipeLeft}
-        cards={userImageDetails}
+        cards={userImageDetails.length > 0 ? userImageDetails : state.cards}
         cardIndex={state.cardIndex}
         cardVerticalMargin={35}
         cardHorizontalMargin={0}
