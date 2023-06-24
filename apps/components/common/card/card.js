@@ -26,7 +26,7 @@ const Card = () => {
     swipeDirection: "",
     cardIndex: 0,
   });
-  console.log(state.cards);
+
   const useSwiper = React.useRef();
   const renderCard = (card, index) => {
     const time = moment(card.createdAt);
@@ -107,7 +107,7 @@ const Card = () => {
     console.log("hello", useSwiper);
     useSwiper.current.swipeLeft();
   };
-  console.log(userImageDetails, "knffjbjfdjfngufgn");
+
   return (
     <View style={styles.container}>
       <Swiper
@@ -223,6 +223,7 @@ const Card = () => {
             Back
           </Text>
         </TouchableOpacity>
+
         <View
           style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
         >

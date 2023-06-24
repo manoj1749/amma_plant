@@ -26,3 +26,5 @@ export const home = require("../assets/image/home.png");
 export const logout = require("../assets/image/logout.png");
 export const addColor = require("../assets/image/addColor.png");
 export const homeColor = require("../assets/image/homeColor.png");
+export const rupee = require("../assets/image/rupee.png");
+export const bitCoin = require("../assets/image/bitcoin.png");
