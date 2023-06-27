@@ -11,6 +11,8 @@ import DrawerStack from "../components/NavigatorComponents/DrawerNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getLoggedinStatus, getToken } from "../utiltis/utilitis";
 import Splash from "../screens/splashScreen";
+import { requestLocationPermission } from "../hooks/useGeoLocation";
+import Geolocation from "@react-native-community/geolocation";
 
 const Stack = createStackNavigator();
 
@@ -99,6 +101,7 @@ const LoginStack = () => {
 
 const RootNavigator = ({ navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
   React.useEffect(() => {
     checkLoginState();
   }, []);

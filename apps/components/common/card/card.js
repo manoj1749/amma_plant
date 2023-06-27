@@ -26,7 +26,7 @@ const Card = () => {
     swipeDirection: "",
     cardIndex: 0,
   });
-
+  console.log(userImageDetails, "user");
   const useSwiper = React.useRef();
   const renderCard = (card, index) => {
     const time = moment(card.createdAt);
@@ -85,7 +85,7 @@ const Card = () => {
           </>
         ) : (
           <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Text>No images</Text>
+            <Text style={{ color: "black" }}>No images</Text>
           </View>
         )}
       </View>

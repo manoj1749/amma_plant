@@ -36,12 +36,18 @@ export const useGeolocation = () => {
       if (res) {
         Geolocation.getCurrentPosition(
           (position) => {
-            setPosition(position.coords);
+            setPosition({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
           },
           (error) => {
             // See error code charts below.
 
-            setPosition(false);
+            setPosition({
+              latitude: 9.095046666666667,
+              longitude: 76.492455,
+            });
           },
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         );

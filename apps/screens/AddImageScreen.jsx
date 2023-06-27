@@ -81,6 +81,7 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
         description: "",
         test: "",
         imageUrL: null,
+        liveLocation: true,
       }));
     });
     return focusHandler;
@@ -140,8 +141,8 @@ const AddImage = ({ setOpenCamera, imageUri, navigation }) => {
       imageUri,
       id: userDetail.id,
     };
-    dispatch(postAction(body, navigation));
-    setState(intailState());
+    console.log(body);
+    dispatch(postAction(body));
   };
   console.log(liveLocation);
   return (

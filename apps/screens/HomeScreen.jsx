@@ -11,12 +11,52 @@ import { getGeolocation } from "../redux/action/AuthAction";
 
 const HomePage = ({ navigation }) => {
   const dispatch = useDispatch();
+  const requestLocationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: "Geolocation Permission",
+          message: "Can we access your location?",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
+        }
+      );
 
+      if (granted === "granted") {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  };
+  const getLocation = () => {
+    const result = requestLocationPermission();
+    result.then((res) => {
+      if (res) {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            // setPosition(position.coords);
+            console.log("hello");
+          },
+          (error) => {
+            // See error code charts below.
+            // setPosition(false);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+      }
+    });
+  };
   React.useEffect(() => {
     getLoginId().then((res) => {
       console.log(res, "auhhh");
       dispatch(getUserData(res));
     });
+    getLocation();
   }, []);
   return (
     <View style={styles.container}>
