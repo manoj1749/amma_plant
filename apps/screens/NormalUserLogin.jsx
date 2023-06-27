@@ -4,7 +4,6 @@ import { plant1 } from "../constants/image";
 import { CommonColor } from "../constants/colors";
 import CommonButton from "../components/common/CommonButton";
 import { NormalUser } from "../data/userGroupData";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useDispatch } from "react-redux";
 import { googleLogin } from "../redux/action/AuthAction";
 const NormalUserLogin = () => {
