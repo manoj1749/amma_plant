@@ -47,7 +47,7 @@ const AddImageStack = () => {
           headerBackImage: () => null,
           header: () => (
             <Header
-              name="Add Image"
+              name="Add Assets"
               onPressRight={() => navigation.openDrawer()}
               onPressLeft={() => navigation.navigate("Home")}
             />

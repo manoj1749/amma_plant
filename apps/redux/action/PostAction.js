@@ -44,7 +44,14 @@ export const postAction = ({
   latitude,
   id,
 }) => {
-  console.log(longtitude, latitude);
+  console.log(serverURL(), {
+    imageUri,
+    description,
+    tags,
+    longtitude,
+    latitude,
+    id,
+  });
   return async (dispatch) => {
     try {
       if (!imageUri) {
@@ -164,7 +171,7 @@ export const getUserData = (id) => {
   };
 };
 export const getImageByid = (id) => {
-  console.log(id);
+  console.log(serverURL(), id);
   return async (dispatch) => {
     try {
       const response = await fetch(`${serverURL()}/user/getImages?id=${id}`);

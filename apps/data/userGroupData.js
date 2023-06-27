@@ -12,16 +12,16 @@ import {
   userOrange,
 } from "../constants/image";
 const userGroupData = [
+  // {
+  //   id: 1,
+  //   title: "Normal User",
+  // },
   {
     id: 1,
-    title: "Normal User",
-  },
-  {
-    id: 2,
     title: "Register User",
   },
   {
-    id: 3,
+    id: 2,
     title: "Oragainzation User",
   },
 ];

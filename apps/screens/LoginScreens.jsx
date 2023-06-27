@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/action/AuthAction";
 import { LoginDetail } from "../data/userGroupData";
 import serverURL from "../helpers/serverURL";
+import { Base64 } from "js-base64";
 
 const LoginScreen = ({ navigation }) => {
   const intialState = {
@@ -34,7 +35,8 @@ const LoginScreen = ({ navigation }) => {
     }));
   };
   const onLoginHandler = () => {
-    const body = { email, password };
+    const pwd = Base64.encode(password);
+    const body = { email, password: pwd };
     dispatch(loginUser(body, navigation));
   };
   serverURL();

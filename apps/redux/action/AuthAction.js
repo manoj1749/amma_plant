@@ -56,6 +56,7 @@ export const registerUser = (
   },
   navigation
 ) => {
+  console.log("passsssss", password, confirmPassword);
   return async (dispatch) => {
     try {
       const formData = new FormData();
