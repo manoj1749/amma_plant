@@ -69,19 +69,19 @@ const LoginScreen = ({ navigation }) => {
               onPress={onLoginHandler}
             />
           </View>
-          <View>
+          {/* <View>
             <Text style={{ color: "white", marginVertical: 5, fontSize: 10 }}>
               OR
             </Text>
-          </View>
-          <View style={styles.IconContainer}>
+          </View> */}
+          {/* <View style={styles.IconContainer}>
             <TouchableOpacity style={styles.iconBtn}>
               <Image source={require("../assets/image/google1.png")} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconBtn}>
               <Image source={require("../assets/image/appleWhite.png")} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     </View>

@@ -28,6 +28,9 @@ const withCameraAndLibrary = (WrappedComponent) => {
       let options = {
         saveToPhotos: true,
         mediaType: "photo",
+        maxWidth: 500,
+        maxHeight: 500,
+        quality: 0.9,
       };
       const response = await launchImageLibrary(options);
 
@@ -40,6 +43,12 @@ const withCameraAndLibrary = (WrappedComponent) => {
         let options = {
           saveToPhotos: true,
           mediaType: "photo",
+          maxWidth: 500,
+          maxHeight: 500,
+          quality: 0.8,
+          cropping: true,
+          cropperToolbarTitle: "crop",
+          cropperCircleOverlay: true,
         };
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,

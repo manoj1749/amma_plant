@@ -36,7 +36,9 @@ const Card = () => {
           <>
             <Image
               style={{ flex: 1, borderRadius: 50 }}
-              source={{ uri: `${serverURL()}/${card.imageUrl}` }}
+              source={{
+                uri: `${serverURL()}/${card.imageUrl.split("/").pop()}`,
+              }}
             />
             <View
               style={{

@@ -103,7 +103,9 @@ const UserProfile = ({ navigation }) => {
             source={
               userDetail
                 ? {
-                    uri: `${serverURL()}/${userDetail?.profilePicture}`,
+                    uri: `${serverURL()}/${userDetail?.profilePicture
+                      .split("/")
+                      .pop()}`,
                   }
                 : avatarBoy
             }

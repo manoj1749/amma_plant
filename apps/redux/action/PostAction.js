@@ -44,14 +44,7 @@ export const postAction = ({
   latitude,
   id,
 }) => {
-  console.log(serverURL(), {
-    imageUri,
-    description,
-    tags,
-    longtitude,
-    latitude,
-    id,
-  });
+  console.log(longtitude, latitude);
   return async (dispatch) => {
     try {
       if (!imageUri) {
@@ -88,7 +81,6 @@ export const postAction = ({
         },
         body: formData,
       });
-      console.log(formData);
       const result = await response.json();
       if (result.statuscode === 201) {
         Toast.show({
@@ -111,11 +103,6 @@ export const postAction = ({
         });
       }
     } catch (error) {
-      dispatch(uploadFailedAction());
-      Toast.show({
-        type: "ErrorToast",
-        text1: "Something went wrong",
-      });
       console.log(error);
     }
   };
@@ -168,11 +155,7 @@ export const getUserData = (id) => {
   console.log(id);
   return async (dispatch) => {
     try {
-      const response = await fetch(`${serverURL()}/user/getDetails?id=${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(`${serverURL()}/user/getDetails?id=${id}`);
       const result = await response.json();
       dispatch(getuserDataAction(result.user));
     } catch (error) {
@@ -181,14 +164,10 @@ export const getUserData = (id) => {
   };
 };
 export const getImageByid = (id) => {
-  console.log(serverURL(), id);
+  console.log(id);
   return async (dispatch) => {
     try {
-      const response = await fetch(`${serverURL()}/user/getImages?id=${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(`${serverURL()}/user/getImages?id=${id}`);
       const result = await response.json();
       dispatch(getuserImagesAction(result.user));
     } catch (error) {
