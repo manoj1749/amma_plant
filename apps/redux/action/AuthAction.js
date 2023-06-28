@@ -58,6 +58,13 @@ export const registerUser = (
 ) => {
   console.log("passsssss", password, confirmPassword);
   return async (dispatch) => {
+    if (!image) {
+      Toast.show({
+        type: "ErrorToast",
+        text1: "Please select profile picture",
+      });
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("image", {

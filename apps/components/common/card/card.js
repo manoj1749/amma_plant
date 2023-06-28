@@ -93,7 +93,7 @@ const Card = () => {
       </View>
     );
   };
-
+  let index = 0;
   const onSwiped = (type) => {
     console.log(`on swiped ${type}`);
   };
@@ -109,7 +109,7 @@ const Card = () => {
     console.log("hello", useSwiper);
     useSwiper.current.swipeLeft();
   };
-
+  console.log(state.cardIndex, "indec");
   return (
     <View style={styles.container}>
       <Swiper

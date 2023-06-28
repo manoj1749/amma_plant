@@ -28,6 +28,7 @@ const CommonInput = ({
   placeholderTextColor,
   onChangeText,
 }) => {
+  console.log(isErr);
   const [isHide, setIsHide] = React.useState(false);
   const styles = styling({ isErr });
   return (
@@ -81,6 +82,7 @@ const styling = ({ isErr }) =>
       position: "relative",
       marginVertical: 10,
       borderRightWidth: isErr ? 5 : 0,
+      borderRightColor: isErr ? "red" : null,
       borderColor: "red",
       borderRadius: 5,
     },

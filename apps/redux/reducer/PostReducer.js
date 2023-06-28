@@ -9,6 +9,7 @@ const initialState = {
   userDetail: null,
   isUploadLoading: false,
   userImageDetails: [],
+  isSuccessfullyPost: false,
 };
 
 const postReducer = (state = initialState, action) => {
@@ -27,6 +28,7 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         isUploadLoading: false,
+        isSuccessfullyPost: true,
       };
     case IMAGE_UPLOADING_FAILED:
       return {

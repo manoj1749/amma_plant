@@ -283,8 +283,6 @@ const OrganizationLogin = ({
                   style={{
                     elevation: 10,
                     backgroundColor: CommonColor.secondary,
-                    borderWidth: checkUri ? 2 : 0,
-                    borderColor: checkUri ? "red" : null,
                     width: 120,
                     height: 120,
                     borderRadius: 100,

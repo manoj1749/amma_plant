@@ -61,6 +61,13 @@ export const postAction = ({
         });
         return;
       }
+      if (!description) {
+        Toast.show({
+          type: "ErrorToast",
+          text1: "Please Enter description",
+        });
+        return;
+      }
       dispatch(uploadPendingAction());
       const formData = new FormData();
       formData.append("image", {
@@ -88,7 +95,7 @@ export const postAction = ({
           text1: result.message,
         });
         dispatch(uploadAssestsAction());
-        return result;
+        return true;
       } else if (result.statuscode === 400) {
         dispatch(uploadFailedAction());
         Toast.show({
@@ -152,7 +159,7 @@ export const postAction = ({
 // );
 
 export const getUserData = (id) => {
-  console.log(id);
+  console.log(id, "id");
   return async (dispatch) => {
     try {
       const response = await fetch(`${serverURL()}/user/getDetails?id=${id}`);
