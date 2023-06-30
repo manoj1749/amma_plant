@@ -21,7 +21,7 @@ const UserGroupScreen = ({ navigation }) => {
         }
         break;
       default:
-        navigation.navigate("NormalUserLogin");
+        navigation.navigate("OrganizationUser");
     }
   };
   return (

@@ -154,46 +154,6 @@ export const loginUser = (data, navigation) => {
     }
   };
 };
-export const googleLogin = (idToken) => {
-  return async (dispatch) => {
-    try {
-      console.log(idToken);
-      const response = await fetch(`${serverURL()}/api/google-signin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: idToken,
-      });
-      const result = await response.json();
-      console.log(result);
-      if (result.statuscode === 200) {
-        Toast.show({
-          type: "SuccessToast",
-          text1: result.message,
-        });
-        dispatch(LoginSuccess(result.user));
-        await AsyncStorage.setItem("token", result.token);
-        await AsyncStorage.setItem("loginId", result.id);
-        await AsyncStorage.setItem("isLoggedin", "true");
-        // navigation.navigate("DrawerStack");
-      } else if (result.statuscode === 400) {
-        Toast.show({
-          type: "ErrorToast",
-          text1: result.message,
-        });
-      } else {
-        Toast.show({
-          type: "ErrorToast",
-          text1: result.error,
-        });
-      }
-      dispatch(loginFailed());
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
 
 export const fetchLocationName = (lat, long) => {
   return async (dispatch) => {
