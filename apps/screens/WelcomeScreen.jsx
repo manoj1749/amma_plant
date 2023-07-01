@@ -6,8 +6,6 @@ import {
   ImageBackground,
 } from "react-native";
 import React from "react";
-import auth from "@react-native-firebase/auth";
-import firebase from "@react-native-firebase/app";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native-paper";
 import CommonButton from "../components/common/CommonButton";
