@@ -1,41 +1,36 @@
-import React from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {FAB} from 'react-native-paper';
-import Map from '../components/Map';
-import Geolocation from '@react-native-community/geolocation';
-import {setLocation} from '../redux/slices/mapSlice';
-import MapScreen from '../components/MapScreen';
-import {getUserDetails} from '../utiltis/utilitis';
-import {getUserDetail, selectUsersDetails} from '../redux/slices/userSlice';
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import Map from "../components/Map";
+import Geolocation from "@react-native-community/geolocation";
+import { getLoginId, getToken } from "../utiltis/utilitis";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getUserData } from "../redux/action/PostAction";
+// import { setLocation } from "../redux/slices/mapSlice";
 
-const HomePage = ({navigation}) => {
+const HomePage = ({ navigation }) => {
   const dispatch = useDispatch();
-  const user = useSelector(selectUsersDetails);
-  console.log(user, 'mmmmmmmmmmmmmmmmmmmmmmmmm');
 
   React.useEffect(() => {
+    getLoginId().then((res) => {
+      console.log(res, "auhhh");
+      dispatch(getUserData(res));
+    });
     Geolocation.getCurrentPosition(
-      position => {
-        const {latitude, longitude} = position.coords;
+      (position) => {
+        const { latitude, longitude } = position.coords;
 
-        dispatch(setLocation({latitude, longitude}));
+        // dispatch(setLocation({ latitude, longitude }));
       },
-      error => {
+      (error) => {
         console.log(error.code, error.message);
       },
-      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   }, []);
   return (
     <View style={styles.container}>
-      {/* <Map /> */}
-      {/* <MapScreen /> */}
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={() => navigation.navigate('addImage')}
-      />
+      <Map />
     </View>
   );
 };
@@ -43,19 +38,19 @@ const HomePage = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
+    position: "relative",
   },
-  map: {flex: 1},
+  map: { flex: 1 },
   fab: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#86adae',
-    position: 'absolute',
+    backgroundColor: "#86adae",
+    position: "absolute",
     bottom: 20,
     right: 10,
     padding: 2,
-    color: 'white',
+    color: "white",
   },
 });
 export default HomePage;

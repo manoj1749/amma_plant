@@ -1,53 +1,48 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import {AsyncStorage} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-async function setTokenId(tokenId) {
+const setLoginId = async (loginId) => {
   try {
-    await AsyncStorage.setItem('userDetails', tokenId);
-    console.log('Token ID set successfully.');
+    await AsyncStorage.setItem("loginId", loginId);
   } catch (error) {
-    console.error('Error while setting token ID:', error);
+    console.log("Error storing loginId:", error);
   }
-}
+};
 
-async function getTokenId() {
+const setToken = async (token) => {
   try {
-    const tokenId = await AsyncStorage.getItem('userDetails');
-    console.log('Token ID retrieved successfully.');
-    return tokenId;
+    await AsyncStorage.setItem("token", token);
   } catch (error) {
-    console.error('Error while getting token ID:', error);
-  }
-}
-async function removeTokenId() {
-  try {
-    const tokenId = await AsyncStorage.removeItem('userDetails');
-    console.log('Token ID retrieved successfully.');
-    return tokenId;
-  } catch (error) {
-    console.error('Error while getting token ID:', error);
-  }
-}
-const storeUserDetails = async userDetails => {
-  try {
-    const jsonUserDetails = JSON.stringify(userDetails);
-    await AsyncStorage.setItem('userDetails', jsonUserDetails);
-  } catch (error) {
-    console.log(error);
+    console.log("Error storing token:", error);
   }
 };
-const getUserDetails = async () => {
+
+const getLoginId = async () => {
   try {
-    const jsonUserDetails = await AsyncStorage.getItem('userDetails');
-    return jsonUserDetails != null ? JSON.parse(jsonUserDetails) : null;
+    const loginId = await AsyncStorage.getItem("loginId");
+    return loginId;
   } catch (error) {
-    console.log(error);
+    console.log("Error getting loginId:", error);
+    return null;
   }
 };
-export {
-  setTokenId,
-  getTokenId,
-  removeTokenId,
-  storeUserDetails,
-  getUserDetails,
+
+const getToken = async () => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    return token;
+  } catch (error) {
+    console.log("Error getting token:", error);
+    return null;
+  }
 };
+const getLoggedinStatus = async () => {
+  try {
+    const isLoggedIn = await AsyncStorage.getItem("isLoggedin");
+    return isLoggedIn;
+  } catch (error) {
+    console.log("Error getting token:", error);
+    return null;
+  }
+};
+
+export { setToken, getToken, getLoggedinStatus, getLoginId };

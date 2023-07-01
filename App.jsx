@@ -4,8 +4,8 @@
  *
  * @format
  */
-import React from 'react';
-import {enableLatestRenderer} from 'react-native-maps';
+import React from "react";
+import { enableLatestRenderer } from "react-native-maps";
 
 import {
   ScrollView,
@@ -14,17 +14,15 @@ import {
   Text,
   useColorScheme,
   View,
-} from 'react-native';
+} from "react-native";
 
-import {selectUser} from './apps/redux/slices/userSlice';
-import {Provider, useSelector} from 'react-redux';
+import { Provider, useSelector } from "react-redux";
 
-import {store} from './apps/redux/store';
-import AppNavigator from './apps/navigation/AppNavigator';
-import Toast from 'react-native-toast-message';
+import { store } from "./apps/redux/store";
+import AppNavigator from "./apps/navigation/AppNavigator";
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-  const user = useSelector(selectUser);
+  const isDarkMode = useColorScheme() === "dark";
+
   return (
     <Provider store={store}>
       <AppNavigator />
@@ -35,7 +33,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'pink',
+    backgroundColor: "pink",
   },
 });
 
